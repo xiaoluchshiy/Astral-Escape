@@ -16,7 +16,7 @@ BUSH_SCALE = 0.4
 BERRY_SCALE = 0.2
 
 
-class Girl(arcade.Sprite):
+class Player(arcade.Sprite):
     def __init__(self):
         super().__init__()
         self.texture = arcade.load_texture("images/player.png")
@@ -53,13 +53,9 @@ class Astral_Escape(arcade.Window):
 
     def setup(self):
         # Создание объектов
-        self.girl = Girl()
-        self.girl_list = arcade.SpriteList()
-        self.girl_list.append(self.girl)
-        self.bushes = arcade.SpriteList()
-        self.berries = arcade.SpriteList()
-        self.batch = Batch()
-        self.score = 0
+        self.player = Player()
+        self.player_list = arcade.SpriteList()
+        self.player_list.append(self.player)
 
     def on_draw(self):
         self.clear()
@@ -68,40 +64,26 @@ class Astral_Escape(arcade.Window):
                                  arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                                   SCREEN_WIDTH, SCREEN_HEIGHT)
                                  )
-
-        # Отрисовка объектов
-        self.bushes.draw()
-        self.berries.draw()
-        self.girl_list.draw()
-
-        # Отрисовка счета
-        arcade.draw_text(
-            f"Ягод: {self.score}", SCREEN_WIDTH - 200,30, arcade.color.RED, 18)
+        self.player_list.draw()
 
     def on_update(self, delta_time):
-        self.girl.update(delta_time)
-
-        # Проверка сбора ягод
-        collected_berries = arcade.check_for_collision_with_list(self.girl, self.berries)
-        for berry in collected_berries:
-            berry.remove_from_sprite_lists()
-            self.score += 1
+        self.player.update(delta_time)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
-            self.girl.change_y = 1
+            self.player.change_y = 1
         elif key == arcade.key.S:
-            self.girl.change_y = -1
+            self.player.change_y = -1
         elif key == arcade.key.A:
-            self.girl.change_x = -1
+            self.player.change_x = -1
         elif key == arcade.key.D:
-            self.girl.change_x = 1
+            self.player.change_x = 1
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
-            self.girl.change_y = 0
+            self.player.change_y = 0
         elif key == arcade.key.A or key == arcade.key.D:
-            self.girl.change_x = 0
+            self.player.change_x = 0
 
 
 def setup_game(width=800, height=600, title="Red Hat collects berries"):
