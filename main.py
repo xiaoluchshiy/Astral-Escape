@@ -1,4 +1,5 @@
 import arcade
+import random
 
 from pyglet.graphics import Batch
 
