@@ -1,2 +1,3 @@
-print(2347)
+print(234)
+print('кристина')
 print('test')
