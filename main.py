@@ -8,7 +8,6 @@ from pyglet.graphics import Batch
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Astral Escape"
-a = 1
 PLAYER_SPEED = 200
 
 
