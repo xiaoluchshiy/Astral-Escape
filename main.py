@@ -1,3 +1,1 @@
-print(234)
-print('кристина')
-print('test')
+print(2347)
