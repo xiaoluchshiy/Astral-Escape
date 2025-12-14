@@ -40,9 +40,6 @@ class Player(arcade.Sprite):
         elif self.top > SCREEN_HEIGHT:
             self.top = SCREEN_HEIGHT
 
-    def switch_form(self):
-        pass
-
 
 class Astral_Escape(arcade.Window):
     def __init__(self, width, height, title):
