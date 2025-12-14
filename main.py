@@ -10,10 +10,6 @@ SCREEN_TITLE = "Astral Escape"
 
 PLAYER_SPEED = 200
 
-BUSH_COUNT = 15
-BUSH_SCALE = 0.4
-BERRY_SCALE = 0.2
-
 
 class Player(arcade.Sprite):
     def __init__(self):
@@ -25,6 +21,9 @@ class Player(arcade.Sprite):
         self.change_y = 0
         self.texture_left = arcade.load_texture("images/player.png")
         self.texture_right = arcade.load_texture("images/player.png").flip_left_right()
+        self.astral_texture_left = arcade.load_texture("images/player_astral.png")
+        self.astral_texture_right = arcade.load_texture("images/player_astral.png").flip_left_right()
+        self.astral_form = False
 
     def update(self, delta_time):
         self.center_x += self.change_x * PLAYER_SPEED * delta_time
@@ -42,7 +41,6 @@ class Player(arcade.Sprite):
             self.top = SCREEN_HEIGHT
 
     def switch_form(self):
-        self.astral_form = False
         pass
 
 
@@ -68,10 +66,16 @@ class Astral_Escape(arcade.Window):
         self.player_list.draw()
 
     def on_update(self, delta_time):
-        if self.track:
-            self.player.texture = self.player.texture_left
+        if not self.player.astral_form:
+            if self.track:
+                self.player.texture = self.player.texture_left
+            else:
+                self.player.texture = self.player.texture_right
         else:
-            self.player.texture = self.player.texture_right
+            if self.track:
+                self.player.texture = self.player.astral_texture_left
+            else:
+                self.player.texture = self.player.astral_texture_right
         self.player.update(delta_time)
 
     def on_key_press(self, key, modifiers):
@@ -85,6 +89,11 @@ class Astral_Escape(arcade.Window):
         elif key == arcade.key.D:
             self.player.change_x = 1
             self.track = False
+        elif key == arcade.key.Q:
+            if self.player.astral_form:
+                self.player.astral_form = False
+            else:
+                self.player.astral_form = True
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
