@@ -121,6 +121,7 @@ class Astral_Escape(arcade.Window):
         elif key == arcade.key.A or key == arcade.key.D:
             self.player.change_x = 0
 
+
 def setup_game(width=800, height=600, title="Red Hat collects berries"):
     game = Astral_Escape(width, height, title)
     game.setup()

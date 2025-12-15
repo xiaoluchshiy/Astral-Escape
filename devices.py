@@ -1,5 +1,6 @@
 import arcade
 
+
 class Device(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -17,13 +18,14 @@ class Device(arcade.Sprite):
 
     def hack(self):
         if not self.is_hacked:
-            self.is_hacked = True
+            self.is_hacked = True  # сделать только в случае успеха
             self.on_hack()
-            return True
-        return False
+        else:
+            pass
 
     def on_hack(self):
         pass
+
 
 class Camera(Device):
     def __init__(self, x, y):
