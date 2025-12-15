@@ -1,4 +1,5 @@
 import arcade
+from devices import Camera
 import random
 
 from pyglet.graphics import Batch
@@ -46,12 +47,19 @@ class Astral_Escape(arcade.Window):
         super().__init__(width, height, title)
         self.background = arcade.load_texture("images/prison.png")
         self.track = True
+        # устройства
+        self.devices = None
+        self.current_device = None
 
     def setup(self):
         # Создание объектов
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player)
+
+        self.devices = arcade.SpriteList()
+        camera = Camera(300, 400)
+        self.devices.append(camera)
 
     def on_draw(self):
         self.clear()
@@ -61,6 +69,12 @@ class Astral_Escape(arcade.Window):
                                                   SCREEN_WIDTH, SCREEN_HEIGHT)
                                  )
         self.player_list.draw()
+        self.devices.draw()
+        if self.current_device:
+            arcade.draw_text("Нажми E для взлома",
+                             SCREEN_WIDTH // 2, 50,
+                             arcade.color.GREEN, 20,
+                             align="center", anchor_x="center")
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
@@ -74,6 +88,12 @@ class Astral_Escape(arcade.Window):
             else:
                 self.player.texture = self.player.astral_texture_right
         self.player.update(delta_time)
+
+        self.current_device = None
+        for device in self.devices:
+            if device.can_interact(self.player.center_x, self.player.center_y):
+                self.current_device = device
+                break
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
@@ -91,6 +111,9 @@ class Astral_Escape(arcade.Window):
                 self.player.astral_form = False
             else:
                 self.player.astral_form = True
+        elif key == arcade.key.E:
+            if self.current_device and not self.current_device.is_hacked:
+                self.current_device.hack()
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
