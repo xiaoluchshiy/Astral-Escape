@@ -14,11 +14,12 @@ class Device(arcade.Sprite):
     def can_interact(self, player_x, player_y):
         distance = ((self.center_x - player_x) ** 2 +
                     (self.center_y - player_y) ** 2) ** 0.5
-        return distance < self.interaction_distance
+        return distance < self.interaction_distance and self.is_hackable
 
     def hack(self):
         if not self.is_hacked:
             self.is_hacked = True  # сделать только в случае успеха
+            self.is_hackable = False
             self.on_hack()
         else:
             pass
