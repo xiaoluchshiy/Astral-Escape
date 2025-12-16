@@ -49,6 +49,7 @@ class Astral_Escape(arcade.Window):
         # устройства
         self.devices = None
         self.current_device = None
+        self.batch = Batch()
 
     def setup(self):
         # Создание объектов
@@ -70,10 +71,11 @@ class Astral_Escape(arcade.Window):
         self.player_list.draw()
         self.devices.draw()
         if self.current_device:
-            arcade.draw_text("Нажми E для взлома",
+            devices_text = arcade.Text("Нажми E для взлома",
                              SCREEN_WIDTH // 2, 50,
                              arcade.color.GREEN, 20,
-                             align="center", anchor_x="center")
+                             align="center", anchor_x="center", batch=self.batch)
+        self.batch.draw()
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
