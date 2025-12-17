@@ -1,6 +1,7 @@
 import arcade
 from devices import Camera
 import random
+from alert import PressE
 
 from pyglet.graphics import Batch
 
@@ -55,7 +56,9 @@ class Astral_Escape(arcade.Window):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player)
-
+        cam_alert = PressE(300, 350)
+        self.alerts = arcade.SpriteList()
+        self.alerts.append(cam_alert)
         self.devices = arcade.SpriteList()
         camera = Camera(300, 400)
         self.devices.append(camera)
@@ -70,10 +73,7 @@ class Astral_Escape(arcade.Window):
         self.player_list.draw()
         self.devices.draw()
         if self.current_device:
-            arcade.draw_text("Нажми E для взлома",
-                             SCREEN_WIDTH // 2, 50,
-                             arcade.color.GREEN, 20,
-                             align="center", anchor_x="center")
+            self.alerts.draw()
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
