@@ -52,6 +52,7 @@ class Astral_Escape(arcade.Window):
         # устройства
         self.devices = None
         self.current_device = None
+        self.world_camera = arcade.camera.Camera2D()
 
     def setup(self):
         # Создание объектов
@@ -82,6 +83,7 @@ class Astral_Escape(arcade.Window):
             self.alerts.draw()
         self.player_list.draw()
         self.devices.draw()
+        self.world_camera.use()
 
 
     def on_update(self, delta_time):
