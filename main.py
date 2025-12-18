@@ -25,6 +25,8 @@ class Player(arcade.Sprite):
         self.astral_texture_left = arcade.load_texture("images/player_astral.png")
         self.astral_texture_right = arcade.load_texture("images/player_astral.png").flip_left_right()
         self.astral_form = False
+        self.astral_form_x = 0
+        self.astral_form_y = 0
 
     def update(self, delta_time):
         self.center_x += self.change_x * PLAYER_SPEED * delta_time
@@ -62,6 +64,8 @@ class Astral_Escape(arcade.Window):
         self.devices = arcade.SpriteList()
         camera = Camera(300, 400)
         self.devices.append(camera)
+        self.change_form = arcade.SpriteList(self.player.texture_left)
+        print(self.player.size, self.player.width)
 
     def on_draw(self):
         self.clear()
@@ -70,10 +74,15 @@ class Astral_Escape(arcade.Window):
                                  arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                                   SCREEN_WIDTH, SCREEN_HEIGHT)
                                  )
-        self.player_list.draw()
-        self.devices.draw()
+        if self.player.astral_form:
+            arcade.draw_texture_rect(self.player.texture_left,
+                                     arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 100,
+                                                      100))
         if self.current_device:
             self.alerts.draw()
+        self.player_list.draw()
+        self.devices.draw()
+
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
@@ -108,8 +117,13 @@ class Astral_Escape(arcade.Window):
         elif key == arcade.key.Q:
             if self.player.astral_form:
                 self.player.astral_form = False
+                self.player.center_x = self.player.astral_form_x
+                self.player.center_y = self.player.astral_form_y
             else:
                 self.player.astral_form = True
+                self.player.astral_form_x = self.player.center_x
+                self.player.astral_form_y = self.player.center_y
+                self.player.center_x = self.player.center_x + self.player.width
         elif key == arcade.key.E:
             if self.current_device and not self.current_device.is_hacked:
                 self.current_device.hack()
