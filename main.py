@@ -66,7 +66,6 @@ class Astral_Escape(arcade.Window):
         camera = Camera(300, 400)
         self.devices.append(camera)
         self.change_form = arcade.SpriteList(self.player.texture_left)
-        print(self.player.size, self.player.width)
 
     def on_draw(self):
         self.clear()
@@ -84,7 +83,6 @@ class Astral_Escape(arcade.Window):
         self.player_list.draw()
         self.devices.draw()
         self.world_camera.use()
-
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
