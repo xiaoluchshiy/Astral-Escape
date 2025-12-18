@@ -50,7 +50,6 @@ class Astral_Escape(arcade.Window):
         # устройства
         self.devices = None
         self.current_device = None
-        self.batch = Batch()
 
     def setup(self):
         # Создание объектов
@@ -74,6 +73,7 @@ class Astral_Escape(arcade.Window):
         self.player_list.draw()
         self.devices.draw()
         if self.current_device:
+            self.alerts.draw()
 
     def on_update(self, delta_time):
         if not self.player.astral_form:
