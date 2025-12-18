@@ -52,6 +52,7 @@ class Astral_Escape(arcade.Window):
         # устройства
         self.devices = None
         self.current_device = None
+        self.world_camera = arcade.camera.Camera2D()
 
     def setup(self):
         # Создание объектов
@@ -82,6 +83,7 @@ class Astral_Escape(arcade.Window):
             self.alerts.draw()
         self.player_list.draw()
         self.devices.draw()
+        self.world_camera.use()
 
 
     def on_update(self, delta_time):
@@ -102,6 +104,8 @@ class Astral_Escape(arcade.Window):
             if device.can_interact(self.player.center_x, self.player.center_y):
                 self.current_device = device
                 break
+        position = (self.player.center_x, self.player.center_y)
+        self.world_camera.position = arcade.math.lerp_2d(self.world_camera.position, position, 0.12)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
