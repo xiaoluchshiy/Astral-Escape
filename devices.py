@@ -1,3 +1,5 @@
+from math import degrees
+
 import arcade
 
 
@@ -29,12 +31,25 @@ class Device(arcade.Sprite):
 
 
 class Camera(Device):
-    def __init__(self, x, y):
+    def __init__(self, x, y, max_degrees):
         super().__init__(x, y)
         self.unhacked_texture = arcade.load_texture("images/devices/unhacked_camera.png")
         self.hacked_texture = arcade.load_texture("images/devices/hacked_camera.png")
         self.texture = self.unhacked_texture
+        self.change_angle = True
+        self.rotation_speed = 20
+        self.rotation_direction = 1
+        self.max_angle = max_degrees
+        self.angle = 0
 
     def on_hack(self):
         if self.hacked_texture:
             self.texture = self.hacked_texture
+
+    def update(self, delta_time):
+        if not self.is_hacked and self.change_angle:
+            self.angle += self.rotation_speed * delta_time * self.rotation_direction
+            if abs(self.angle) >= self.max_angle:
+                self.rotation_direction *= -1
+        elif self.is_hacked:
+            self.angle = 0

@@ -69,7 +69,7 @@ class Astral_Escape(arcade.Window):
         self.alerts = arcade.SpriteList()
         self.alerts.append(cam_alert)
         self.devices = arcade.SpriteList()
-        camera = Camera(300, 400)
+        camera = Camera(300, 400, 45)
         self.devices.append(camera)
         self.change_form = arcade.SpriteList(self.player.texture_left)
 
@@ -112,7 +112,8 @@ class Astral_Escape(arcade.Window):
                 self.player.texture = self.player.astral_texture_forward
 
         self.player.update(delta_time)
-
+        for device in self.devices:
+            device.update(delta_time)
         self.current_device = None
         for device in self.devices:
             if device.can_interact(self.player.center_x, self.player.center_y):
