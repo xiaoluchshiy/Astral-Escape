@@ -6,7 +6,7 @@ import arcade
 class Device(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.scale = 0.1
+        self.scale = 0.12
         self.center_x = x
         self.center_y = y
         self.is_hackable = True
@@ -33,8 +33,8 @@ class Device(arcade.Sprite):
 class Camera(Device):
     def __init__(self, x, y, max_degrees):
         super().__init__(x, y)
-        self.unhacked_texture = arcade.load_texture("images/devices/unhacked_camera.png")
-        self.hacked_texture = arcade.load_texture("images/devices/hacked_camera.png")
+        self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
+        self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
         self.texture = self.unhacked_texture
         self.change_angle = True
         self.rotation_speed = 20
