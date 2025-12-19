@@ -110,8 +110,6 @@ class Astral_Escape(arcade.Window):
                 self.player.texture = self.player.astral_texture_back
             if self.track_v == 0:
                 self.player.texture = self.player.astral_texture_forward
-        if self.player.astral_form and self.track_h == 2 and self.track_v == 2:
-            pass
 
         self.player.update(delta_time)
 
