@@ -33,8 +33,8 @@ class Device(arcade.Sprite):
 class Camera(Device):
     def __init__(self, x, y, max_degrees):
         super().__init__(x, y)
-        self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
-        self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
+        self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png").flip_left_right()
+        self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png").flip_left_right()
         self.texture = self.unhacked_texture
         self.change_angle = True
         self.rotation_speed = 20
