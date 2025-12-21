@@ -33,14 +33,19 @@ class Device(arcade.Sprite):
 class Camera(Device):
     def __init__(self, x, y, max_degrees):
         super().__init__(x, y)
-        self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png").flip_left_right()
-        self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png").flip_left_right()
+        self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
+        self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
+        self.radius = arcade.load_texture("images/devices/radius.png")
         self.texture = self.unhacked_texture
         self.change_angle = True
         self.rotation_speed = 20
         self.rotation_direction = 1
         self.max_angle = max_degrees
         self.angle = 0
+        self.radius_angle = 0
+        self.radius_rotation_speed = 20
+        self.radius_direction = 1
+        self.radius_size = 200
 
     def on_hack(self):
         if self.hacked_texture:
@@ -51,5 +56,26 @@ class Camera(Device):
             self.angle += self.rotation_speed * delta_time * self.rotation_direction
             if abs(self.angle) >= self.max_angle:
                 self.rotation_direction *= -1
-        elif self.is_hacked:
-            self.angle = 0
+            self.radius_angle += self.radius_rotation_speed * delta_time * self.radius_direction
+            if self.radius_angle >= self.max_angle:
+                self.radius_direction = -1
+            elif self.radius_angle <= - self.max_angle:
+                self.radius_direction = 1
+            elif self.is_hacked:
+                self.angle = 0
+                self.radius_angle = 0
+
+    def draw_radius(self):
+        if not self.is_hacked:
+            arcade.draw_arc_filled(
+                self.center_x,
+                self.center_y,
+                self.radius_size * 2,
+                self.radius_size * 2,
+                (255, 0, 0, 100),
+                self.radius_angle - (self.max_angle / 2),
+                self.radius_angle + (self.max_angle / 2),
+                32
+            )
+        else:
+            pass

@@ -92,6 +92,9 @@ class Astral_Escape(arcade.Window):
                                                       100))
         self.player_list.draw()
         self.devices.draw()
+        for device in self.devices:
+            if not device.is_hacked:
+                device.draw_radius()
         if self.current_device:
             self.alerts.draw()
         self.world_camera.use()
