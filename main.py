@@ -6,8 +6,8 @@ from alert import PressE
 from pyglet.graphics import Batch
 
 # Константы
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Astral Escape"
 PLAYER_SPEED = 200
 
@@ -110,6 +110,10 @@ class Astral_Escape(arcade.Window):
                 self.player.texture = self.player.astral_texture_left
             if self.track_h == 0:
                 self.player.texture = self.player.astral_texture_right
+            if self.track_v == 1:
+                self.player.texture = self.player.astral_texture_back
+            if self.track_v == 0:
+                self.player.texture = self.player.astral_texture_forward
 
         self.player.update(delta_time)
         for device in self.devices:
