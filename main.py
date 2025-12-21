@@ -98,7 +98,6 @@ class Astral_Escape(arcade.Window):
         if self.current_device:
             self.alerts.draw()
         self.world_camera.use()
-        # print(self.player.center_y, self.player.center_x)d
 
     def on_update(self, delta_time):
         self.physics_engine.update()
