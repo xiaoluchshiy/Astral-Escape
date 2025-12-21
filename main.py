@@ -16,8 +16,8 @@ class Player(arcade.Sprite):
     def __init__(self):
         super().__init__()
         self.scale = 0.1
-        self.center_x = 0
-        self.center_y = SCREEN_HEIGHT // 2
+        self.center_x = 210
+        self.center_y = 170
         self.change_x = 0
         self.change_y = 0
         self.texture = arcade.load_texture("images/player_back.png")
@@ -65,33 +65,45 @@ class Astral_Escape(arcade.Window):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player)
-        cam_alert = PressE(300, 350)
+        cam_alert = PressE(90, 640)
         self.alerts = arcade.SpriteList()
         self.alerts.append(cam_alert)
         self.devices = arcade.SpriteList()
-        camera = Camera(300, 400, 45)
+        camera = Camera(90, 680, 45)
         self.devices.append(camera)
         self.change_form = arcade.SpriteList(self.player.texture_left)
+        self.wall_list = arcade.SpriteList()
+        map_name = "map/map.tmx"
+        tile_map = arcade.load_tilemap(map_name, scaling=3)
+        self.wall_list = tile_map.sprite_lists["walls"]
+        self.door_list = tile_map.sprite_lists["door"]
+        self.collision_list = tile_map.sprite_lists["collision"]
+        self.astral_collision_list = tile_map.sprite_lists["astral_collision"]
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
 
     def on_draw(self):
         self.clear()
         # Отрисовка фона
-        arcade.draw_texture_rect(self.background,
-                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                                  SCREEN_WIDTH, SCREEN_HEIGHT)
-                                 )
+        self.wall_list.draw()
+        self.door_list.draw()
         if self.player.astral_form:
             arcade.draw_texture_rect(self.player.texture_right,
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 100,
                                                       100))
-        if self.current_device:
-            self.alerts.draw()
         self.player_list.draw()
         self.devices.draw()
+        for device in self.devices:
+            if not device.is_hacked:
+                device.draw_radius()
+        if self.current_device:
+            self.alerts.draw()
         self.world_camera.use()
 
     def on_update(self, delta_time):
-
+        self.physics_engine.update()
+        if not self.player.astral_form:
+            self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
+            self.astral_physics_engine.update()
         if not self.player.astral_form:
             if self.track_h == 1:
                 self.player.texture = self.player.texture_left
@@ -147,6 +159,7 @@ class Astral_Escape(arcade.Window):
                 self.player.astral_form_y = self.player.center_y
                 self.player.center_x = self.player.center_x + self.player.width
                 self.player.texture = self.player.astral_texture_forward
+                self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         elif key == arcade.key.E:
             if self.current_device and not self.current_device.is_hacked:
                 self.current_device.hack()
