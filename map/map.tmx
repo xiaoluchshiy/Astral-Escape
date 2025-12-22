@@ -3,27 +3,27 @@
  <tileset firstgid="1" source="map.tsx"/>
  <layer id="1" name="walls" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt1EEKgCAQheFZtzPJXXfpaB09s4IKFSHJzP+Dt7HNvKwRAQAAAAAAAAAAAK56kUklRtuUnvcpY9MlZig0Y070ba+v2jLv+XVfXycTeVabUN/z3m7hftfzUbzfunsH70+aR6xvbHfVqrW+9j899rGLDpzfg+9bALmYDH0=
+   eJzt1EEKgCAQheFZtzPJXXfpaB09s4SIyiRJ1P+Dt4hp4ZMaEQAAAAAAANSmF5lURLRN7jN/YWy6iAx5jpkMfdvrq7bMe9xzrX3v+pjAvBShvn5/H98peUeH+q7zUS6/eXcP/500jTd9n/ZXaVrra/9Pv49ddGB+DgAAAOq1ACFbDPQ=
   </data>
  </layer>
  <layer id="7" name="door" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJztzgENAAAIA6DnsH9QY3xTSEACAAAAAAAAwDfTDgDAEQvkCAAb
+   eJztzgENAAAIwKDnsH9QYzg3SEABAAAAAPDRXAcAAACAFrvPABs=
   </data>
  </layer>
  <layer id="2" name="collision" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt1jEKACEMRUFvkfvfdMutNkVA8K8zYBMM+DrXAgAAAAAAoFPDk2rydr059O7ZOYXed14f9/7a2+2kNk96k+nt5+lu7L3pD/0AACgFCQ==
+   eJzt1jEKwCAMQNHcove/aUen1iAO0bwHLorg18UIAAAAoJtnwzhJx97VfXrr05vfp7e+r/POerr1RmK9otveb0bvmNd7vh3/59vuBADgzwtPwQkU
   </data>
  </layer>
  <layer id="8" name="door_collision" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAIA7C5wL9TnkngIm3SBAAAAAAAAAB+mwaAawtLKwAv
+   eJztwzENAAAMA6C6mH+neyuhByQkAAAAAACw7SoAAAAseRssAEY=
   </data>
  </layer>
  <layer id="6" name="astral_collision" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAIA7C5wL9TnlngIW3SBAAAAAAAAAD+mQaASwtNUwAv
+   eJztwzENAAAMA6C6mH+neyqiByQkAAAAAACw6RoAAABWPcsKAC8=
   </data>
  </layer>
 </map>
