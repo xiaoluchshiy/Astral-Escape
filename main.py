@@ -120,6 +120,7 @@ class Astral_Escape(arcade.Window):
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
 
         self.sound_timer = 0
+        self.explosion_sound = arcade.load_sound("music.wav")
 
         self.current_texture = 0
         self.texture_change_time = 0
@@ -196,6 +197,7 @@ class Astral_Escape(arcade.Window):
             self.explosion_sound.play()
         if self.sound_timer >= 120:
             self.sound_timer = 0
+        self.sound_timer += delta_time
         self.physics_engine.update()
         self.update_animation()
         if self.door:
