@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="20" tileheight="20" infinite="0" nextlayerid="11" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="20" tileheight="20" infinite="0" nextlayerid="12" nextobjectid="1">
  <tileset firstgid="1" source="map.tsx"/>
  <layer id="1" name="walls" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJztlksKgDAMBbN2p6I7i0fxaB7d1IWU4pf6azsDD4R0kcEYKwIAAAAAAHfRagonzbftPE7uvjalyBCSWvOl0x5rvqH584zk5lvJPL9Bicn3DmLbeVXgPorN9+o37Pvg+2/wXXbvaGP02Ui6vlv9thv11Hx73cf6fgf3jLujU/O19U5WZ37+P8V23zjjm8p90pKbr3+Hrg/qR9Hz4xt9AwAAAMDzTLKjGnY=
+   eJzt1jsOgCAQRdGp7cRo515cmksXjBr8x+CP4Z7kVVDwDE4QAQAAAHCXyibzUn57nMel3tclF2lCUth82enIVt/Q/PmOpNbXSH9/gxJT3zvENvNM4DyKre/Vf3jZh77/Rt9p9rZDZnNYW9+981Y769r6jvPb3+PPaG193Xotm3d+9R209NXynnRS67t8Qxcn62ex+9s3zg0AAIDndabiGkE=
   </data>
  </layer>
  <layer id="7" name="door" width="60" height="40">
@@ -28,12 +28,17 @@
  </layer>
  <layer id="8" name="door_collision" width="60" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAMA6C6mH+neyuhByQkAAAAAACw7SoAAAAseRssAEY=
+   eJztzjENAEAIBMGzgKP3r4qKBAdPMZNsvwkAAAAAANxWyZt+vwAAAMDWFSIA9A==
   </data>
  </layer>
  <layer id="6" name="astral_collision" width="60" height="40">
   <data encoding="base64" compression="zlib">
    eJztwzENAAAMA6C6mH+neyqiByQkAAAAAACw6RoAAABWPcsKAC8=
+  </data>
+ </layer>
+ <layer id="11" name="astral" width="60" height="40" opacity="0.65">
+  <data encoding="base64" compression="zlib">
+   eJzt0cEJACAQA8FUIpZy/VelDwu4nygzsP9AEgAAAAAAXjFO/Gkmtf+t2zsAAADoWwyaAPs=
   </data>
  </layer>
 </map>

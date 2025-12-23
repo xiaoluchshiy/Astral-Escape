@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="map" tilewidth="20" tileheight="20" tilecount="11" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="map" tilewidth="20" tileheight="20" tilecount="12" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="9">
   <image source="images/1.png" width="20" height="20"/>
@@ -33,5 +33,8 @@
  </tile>
  <tile id="31">
   <image source="images/8.png" width="20" height="20"/>
+ </tile>
+ <tile id="32">
+  <image source="images/astral_col.png" width="20" height="20"/>
  </tile>
 </tileset>

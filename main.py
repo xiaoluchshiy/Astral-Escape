@@ -9,14 +9,14 @@ from pyglet.graphics import Batch
 SCREEN_WIDTH = 3000
 SCREEN_HEIGHT = 1800
 SCREEN_TITLE = "Astral Escape"
-PLAYER_SPEED = 200
+PLAYER_SPEED = 150
 ANIMATION_SPEED = 0.085
 
 
 class Player(arcade.Sprite):
     def __init__(self):
         super().__init__()
-        self.scale = 0.1
+        self.scale = 0.08
         self.center_x = 690
         self.center_y = 720
         self.change_x = 0
@@ -112,6 +112,7 @@ class Astral_Escape(arcade.Window):
         self.collision_list = tile_map.sprite_lists["collision"]
         self.astral_collision_list = tile_map.sprite_lists["astral_collision"]
         self.door_collision_list = tile_map.sprite_lists["door_collision"]
+        self.astral_list = tile_map.sprite_lists["astral"]
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
         self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
@@ -169,10 +170,12 @@ class Astral_Escape(arcade.Window):
         self.wall_list.draw()
         if self.door:
             self.door_list.draw()
+            self.door_collision_list.draw()
         if self.player.astral_form:
             arcade.draw_texture_rect(self.player.texture_right,
-                                     arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 100,
-                                                      100))
+                                     arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
+                                                      80))
+            self.astral_list.draw()
         self.player_list.draw()
         self.devices.draw()
         for device in self.devices:
