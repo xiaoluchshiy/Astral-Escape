@@ -81,6 +81,7 @@ class Player(arcade.Sprite):
 
         self.is_walking = self.center_x != old_x or self.center_y != old_y
 
+
 class Astral_Escape(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
@@ -204,7 +205,7 @@ class Astral_Escape(arcade.Window):
             self.door_physics_engine.update()
         if not self.player.astral_form:
             self.astral_physics_engine.update()
-        if  self.player.astral_form:
+        if self.player.astral_form:
             if self.track_h == 1:
                 self.player.texture = self.player.astral_texture_left
             if self.track_h == 0:
