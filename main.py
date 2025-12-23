@@ -1,5 +1,5 @@
 import arcade
-from devices import Camera
+from devices import Camera, Button
 import random
 from alert import PressE
 
@@ -11,29 +11,6 @@ SCREEN_HEIGHT = 1800
 SCREEN_TITLE = "Astral Escape"
 PLAYER_SPEED = 150
 ANIMATION_SPEED = 0.085
-
-
-class StartView(arcade.View):
-    def on_show(self):
-        """Настройка начального экрана"""
-        arcade.set_background_color(arcade.color.BLACK)
-
-    def on_draw(self):
-        
-        self.clear()
-        # Батч для текста
-        self.batch = Batch()
-        start_text = arcade.Text("Тетрис", self.window.width / 2, self.window.height / 2,
-                                 arcade.color.WHITE, font_size=50, anchor_x="center", batch=self.batch)
-        any_key_text = arcade.Text("Any key to start",
-                                   self.window.width / 2, self.window.height / 2 - 75,
-                                   arcade.color.GRAY, font_size=20, anchor_x="center", batch=self.batch)
-        self.batch.draw()
-
-    def on_key_press(self, key, modifiers):
-        """Начало игры при нажатии клавиши"""
-        game_view = Astral_Escape()
-        self.window.show_view(game_view)
 
 
 class Player(arcade.Sprite):
@@ -121,12 +98,14 @@ class Astral_Escape(arcade.Window):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player)
-        cam_alert = PressE(570, 1180)
+        self.cam_alert = PressE(self.player.center_x, self.player.center_y - 30)
         self.alerts = arcade.SpriteList()
-        self.alerts.append(cam_alert)
+        self.alerts.append(self.cam_alert)
         self.devices = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
+        button = Button(1110, 809)
         self.devices.append(camera)
+        self.devices.append(button)
         self.wall_list = arcade.SpriteList()
         map_name = "map/map.tmx"
         tile_map = arcade.load_tilemap(map_name, scaling=3)
@@ -209,6 +188,9 @@ class Astral_Escape(arcade.Window):
         self.world_camera.use()
 
     def on_update(self, delta_time):
+        self.cam_alert.center_y = self.player.center_y - 45
+        self.cam_alert.center_x = self.player.center_x
+
         self.physics_engine.update()
         self.update_animation()
         if self.door:

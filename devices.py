@@ -79,3 +79,14 @@ class Camera(Device):
             )
         else:
             pass
+
+
+class Button(Device):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.texture = arcade.load_texture('images/devices/button.jpg')
+        self.scale = 0.07
+        self.is_hackable = True
+
+    def draw_radius(self):
+        pass
