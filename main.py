@@ -12,6 +12,29 @@ SCREEN_TITLE = "Astral Escape"
 PLAYER_SPEED = 200
 
 
+class StartView(arcade.View):
+    def on_show(self):
+        """Настройка начального экрана"""
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        
+        self.clear()
+        # Батч для текста
+        self.batch = Batch()
+        start_text = arcade.Text("Тетрис", self.window.width / 2, self.window.height / 2,
+                                 arcade.color.WHITE, font_size=50, anchor_x="center", batch=self.batch)
+        any_key_text = arcade.Text("Any key to start",
+                                   self.window.width / 2, self.window.height / 2 - 75,
+                                   arcade.color.GRAY, font_size=20, anchor_x="center", batch=self.batch)
+        self.batch.draw()
+
+    def on_key_press(self, key, modifiers):
+        """Начало игры при нажатии клавиши"""
+        game_view = Astral_Escape()
+        self.window.show_view(game_view)
+
+
 class Player(arcade.Sprite):
     def __init__(self):
         super().__init__()
