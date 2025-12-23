@@ -181,8 +181,8 @@ class Astral_Escape(arcade.Window):
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
                                                       80))
             self.astral_list.draw()
-        self.player_list.draw()
         self.devices.draw()
+        self.player_list.draw()
         for device in self.devices:
             if not device.is_hacked:
                 device.draw_radius()
