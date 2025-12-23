@@ -1,5 +1,5 @@
 import arcade
-from devices import Camera
+from devices import Camera, Button
 import random
 from alert import PressE
 
@@ -98,12 +98,14 @@ class Astral_Escape(arcade.Window):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player)
-        cam_alert = PressE(570, 1180)
+        self.cam_alert = PressE(self.player.center_x, self.player.center_y - 30)
         self.alerts = arcade.SpriteList()
-        self.alerts.append(cam_alert)
+        self.alerts.append(self.cam_alert)
         self.devices = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
+        button = Button(1110, 809)
         self.devices.append(camera)
+        self.devices.append(button)
         self.wall_list = arcade.SpriteList()
         map_name = "map/map.tmx"
         tile_map = arcade.load_tilemap(map_name, scaling=3)
@@ -116,6 +118,9 @@ class Astral_Escape(arcade.Window):
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
         self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
+
+        self.sound_timer = 0
+        self.explosion_sound = arcade.load_sound("music.wav")
 
         self.current_texture = 0
         self.texture_change_time = 0
