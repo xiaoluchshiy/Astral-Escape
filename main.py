@@ -191,6 +191,8 @@ class Astral_Escape(arcade.Window):
         self.world_camera.use()
 
     def on_update(self, delta_time):
+        self.cam_alert.center_y = self.player.center_y - 45
+        self.cam_alert.center_x = self.player.center_x
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
