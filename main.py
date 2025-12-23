@@ -194,7 +194,6 @@ class Astral_Escape(arcade.Window):
         if self.sound_timer >= 120:
             self.sound_timer = 0
         self.sound_timer += delta_time
-        print(self.sound_timer)
         self.physics_engine.update()
         self.update_animation()
         if self.door:
