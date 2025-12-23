@@ -122,9 +122,6 @@ class Astral_Escape(arcade.Window):
         self.current_texture = 0
         self.texture_change_time = 0
 
-        self.sound_timer = 0
-        self.explosion_sound = arcade.load_sound("music.wav")
-
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
         if not self.player.astral_form:
@@ -181,8 +178,8 @@ class Astral_Escape(arcade.Window):
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
                                                       80))
             self.astral_list.draw()
-        self.player_list.draw()
         self.devices.draw()
+        self.player_list.draw()
         for device in self.devices:
             if not device.is_hacked:
                 device.draw_radius()
@@ -191,6 +188,8 @@ class Astral_Escape(arcade.Window):
         self.world_camera.use()
 
     def on_update(self, delta_time):
+        self.cam_alert.center_y = self.player.center_y - 45
+        self.cam_alert.center_x = self.player.center_x
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
