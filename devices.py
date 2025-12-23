@@ -84,7 +84,7 @@ class Camera(Device):
 class Button(Device):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.texture = arcade.load_texture('images/devices/button.jpg')
+        self.texture = arcade.load_texture('images/devices/button.png')
         self.scale = 0.07
         self.is_hackable = True
 
