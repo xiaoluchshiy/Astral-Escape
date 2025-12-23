@@ -27,7 +27,6 @@ class Player(arcade.Sprite):
 
         self.texture = arcade.load_texture("images/player/player_back1.png")
 
-        self.idle_texture = arcade.load_texture("images/player/player_forward1.png")
         self.textures_forward = []
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_forward{i}.png')
@@ -62,8 +61,12 @@ class Player(arcade.Sprite):
     def update(self, delta_time):
         old_x = self.center_x
         old_y = self.center_y
-        self.center_x += self.change_x * PLAYER_SPEED * delta_time
-        self.center_y += self.change_y * PLAYER_SPEED * delta_time
+        if self.change_x != 0 and self.change_y != 0:
+            self.center_x += self.change_x * PLAYER_SPEED // 2 * delta_time
+            self.center_y += self.change_y * PLAYER_SPEED // 2 * delta_time
+        else:
+            self.center_x += self.change_x * PLAYER_SPEED * delta_time
+            self.center_y += self.change_y * PLAYER_SPEED * delta_time
 
         # Ограничение движения в пределах экрана
         if self.left < 0:
@@ -84,6 +87,7 @@ class Astral_Escape(arcade.Window):
         self.background = arcade.load_texture("images/space.png")
         self.track_h = 2
         self.track_v = 2
+        self.door = True
         # устройства
         self.devices = None
         self.current_device = None
@@ -107,7 +111,10 @@ class Astral_Escape(arcade.Window):
         self.door_list = tile_map.sprite_lists["door"]
         self.collision_list = tile_map.sprite_lists["collision"]
         self.astral_collision_list = tile_map.sprite_lists["astral_collision"]
+        self.door_collision_list = tile_map.sprite_lists["door_collision"]
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
+        self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
+        self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
 
         self.current_texture = 0
         self.texture_change_time = 0
@@ -124,9 +131,7 @@ class Astral_Escape(arcade.Window):
                         if self.current_texture >= len(self.player.textures_right):
                             self.current_texture = 0
                         self.player.texture = self.player.textures_right[self.current_texture]
-                else:
-                    self.player.texture = self.player.idle_texture
-            if self.track_h == 0:
+            elif self.track_h == 0:
                 if self.player.is_walking:
                     self.texture_change_time += delta_time
                     if self.texture_change_time >= ANIMATION_SPEED:
@@ -135,9 +140,7 @@ class Astral_Escape(arcade.Window):
                         if self.current_texture >= len(self.player.textures_left):
                             self.current_texture = 0
                         self.player.texture = self.player.textures_left[self.current_texture]
-                else:
-                    self.player.texture = self.player.idle_texture
-            if self.track_v == 1:
+            elif self.track_v == 1:
                 if self.player.is_walking:
                     self.texture_change_time += delta_time
                     if self.texture_change_time >= ANIMATION_SPEED:
@@ -146,9 +149,7 @@ class Astral_Escape(arcade.Window):
                         if self.current_texture >= len(self.player.textures_back):
                             self.current_texture = 0
                         self.player.texture = self.player.textures_back[self.current_texture]
-                else:
-                    self.player.texture = self.player.idle_texture
-            if self.track_v == 0:
+            elif self.track_v == 0:
                 if self.player.is_walking:
                     self.texture_change_time += delta_time
                     if self.texture_change_time >= ANIMATION_SPEED:
@@ -157,8 +158,8 @@ class Astral_Escape(arcade.Window):
                         if self.current_texture >= len(self.player.textures_forward):
                             self.current_texture = 0
                         self.player.texture = self.player.textures_forward[self.current_texture]
-                else:
-                    self.player.texture = self.player.idle_texture
+            else:
+                self.player.texture = self.player.texture_forward
 
     def on_draw(self):
         self.clear()
@@ -166,7 +167,8 @@ class Astral_Escape(arcade.Window):
         arcade.draw_texture_rect(self.background,
                                  arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT))
         self.wall_list.draw()
-        self.door_list.draw()
+        if self.door:
+            self.door_list.draw()
         if self.player.astral_form:
             arcade.draw_texture_rect(self.player.texture_right,
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 100,
@@ -183,8 +185,9 @@ class Astral_Escape(arcade.Window):
     def on_update(self, delta_time):
         self.physics_engine.update()
         self.update_animation()
+        if self.door:
+            self.door_physics_engine.update()
         if not self.player.astral_form:
-            self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
             self.astral_physics_engine.update()
         if  self.player.astral_form:
             if self.track_h == 1:
