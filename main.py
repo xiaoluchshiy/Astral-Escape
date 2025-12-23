@@ -120,6 +120,9 @@ class Astral_Escape(arcade.Window):
         self.current_texture = 0
         self.texture_change_time = 0
 
+        self.sound_timer = 0
+        self.explosion_sound = arcade.load_sound("music.wav")
+
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
         if not self.player.astral_form:
@@ -186,6 +189,12 @@ class Astral_Escape(arcade.Window):
         self.world_camera.use()
 
     def on_update(self, delta_time):
+        if self.sound_timer == 0:
+            self.explosion_sound.play()
+        if self.sound_timer >= 120:
+            self.sound_timer = 0
+        self.sound_timer += delta_time
+        print(self.sound_timer)
         self.physics_engine.update()
         self.update_animation()
         if self.door:
