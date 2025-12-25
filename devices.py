@@ -1,3 +1,4 @@
+import math
 from math import degrees
 from arcade.particles import FadeParticle, Emitter, EmitBurst, EmitInterval, EmitMaintainCount
 from pyglet.graphics import Batch
@@ -89,8 +90,13 @@ class Camera(Device):
         super().__init__(x, y)
         self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
         self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
-        self.radius = arcade.load_texture("images/devices/radius.png")
         self.texture = self.unhacked_texture
+
+        self.radius_sprite = arcade.Sprite("images/devices/radius.png")
+        self.radius_sprite.scale = 0.1
+        self.radius_sprite.center_x = x
+        self.radius_sprite.center_y = y
+
         self.change_angle = True
         self.rotation_speed = 20
         self.rotation_direction = 1
@@ -99,12 +105,14 @@ class Camera(Device):
         self.radius_angle = 0
         self.radius_rotation_speed = 20
         self.radius_direction = 1
-        self.radius_size = 200
+        self.radius_length = 200
+        self.is_hacked = False
         self.emitters = []
 
     def on_hack(self):
         if self.hacked_texture:
             self.texture = self.hacked_texture
+            self.is_hacked = True
             self.emitters.append(make_explosion(self.center_x, self.center_y))
             self.emitters.append(make_smoke_puff(self.center_x, self.center_y))
 
@@ -116,32 +124,22 @@ class Camera(Device):
             self.radius_angle += self.radius_rotation_speed * delta_time * self.radius_direction
             if self.radius_angle >= self.max_angle:
                 self.radius_direction = -1
-            elif self.radius_angle <= - self.max_angle:
+            elif self.radius_angle <= -self.max_angle:
                 self.radius_direction = 1
-            elif self.is_hacked:
-                self.angle = 0
-                self.radius_angle = 0
+        rad = math.radians(self.radius_angle)
+        offset_x = math.cos(rad) * (self.radius_length / 2)
+        offset_y = math.sin(rad) * (self.radius_length / 2)
+        self.radius_sprite.center_x = self.center_x + offset_x
+        self.radius_sprite.center_y = self.center_y + offset_y
+        self.radius_sprite.angle = self.radius_angle
         emitters_copy = self.emitters.copy()
         for e in emitters_copy:
             e.update(delta_time)
-        for e in emitters_copy:
             if e.can_reap():
                 self.emitters.remove(e)
 
     def draw_radius(self):
-        if not self.is_hacked:
-            arcade.draw_arc_filled(
-                self.center_x,
-                self.center_y,
-                self.radius_size * 2,
-                self.radius_size * 2,
-                (255, 0, 0, 100),
-                self.radius_angle - (self.max_angle / 2),
-                self.radius_angle + (self.max_angle / 2),
-                32
-            )
-        else:
-            pass
+        pass
 
 
 class Robot(Device):

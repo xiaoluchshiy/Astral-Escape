@@ -104,6 +104,7 @@ class Astral_Escape(arcade.Window):
         self.alerts = arcade.SpriteList()
         self.alerts.append(self.cam_alert)
         self.devices = arcade.SpriteList()
+        self.radius_sprites = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
         button = Button(1110, 809)
         self.devices.append(camera)
@@ -132,6 +133,7 @@ class Astral_Escape(arcade.Window):
             point_b=(1000, 1100),
         )
         self.devices.append(robot)
+        self.radius_sprites.append(camera.radius_sprite)
 
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
@@ -197,6 +199,7 @@ class Astral_Escape(arcade.Window):
                                      arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
                                                       SCREEN_HEIGHT))
             self.wall_list.draw()
+            self.radius_sprites.draw()
             if self.door:
                 self.door_list.draw()
                 self.door_collision_list.draw()
@@ -221,6 +224,10 @@ class Astral_Escape(arcade.Window):
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
         self.cam_alert.center_x = self.player.center_x
+        if not self.player.astral_form:  # только в физической форме
+            for radius in self.radius_sprites:
+                if arcade.check_for_collision(self.player, radius):
+                    self.setup()
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
