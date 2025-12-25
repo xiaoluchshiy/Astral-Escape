@@ -5,9 +5,9 @@ from pyglet.graphics import Batch
 
 # Константы
 SCREEN_WIDTH = 3000
-SCREEN_HEIGHT = 1800
+SCREEN_HEIGHT = 2000
 SCREEN_TITLE = "Astral Escape"
-PLAYER_SPEED = 150
+PLAYER_SPEED = 1500
 ANIMATION_SPEED = 0.085
 
 
@@ -149,6 +149,8 @@ class Astral_Escape(arcade.View):
         self.astral_collision_list = tile_map.sprite_lists["astral_collision"]
         self.door_collision_list = tile_map.sprite_lists["door_collision"]
         self.astral_list = tile_map.sprite_lists["astral"]
+        self.door1_collision_list = tile_map.sprite_lists["door1_collision"]
+        self.door1_list = tile_map.sprite_lists["door1"]
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
         self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
@@ -226,6 +228,7 @@ class Astral_Escape(arcade.View):
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
                                                       80))
             self.astral_list.draw()
+        self.door1_list.draw()
         self.devices.draw()
         self.player_list.draw()
         if self.current_device:
@@ -271,6 +274,10 @@ class Astral_Escape(arcade.View):
                 self.player.texture = self.player.astral_texture_back
             if self.track_v == 0:
                 self.player.texture = self.player.astral_texture_forward
+
+        if arcade.check_for_collision_with_list(self.player, self.door1_collision_list):
+            game_view = FinalView()
+            self.window.show_view(game_view)
 
         self.player.update(delta_time)
         for device in self.devices:
@@ -323,23 +330,29 @@ class Astral_Escape(arcade.View):
 
 
 class FinalView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        # устанавливаем фон
+        self.background = arcade.load_texture("images/space.png")
+
     def on_draw(self):
         """Отрисовка начального экрана"""
         self.clear()
+        arcade.draw_texture_rect(self.background,
+                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
+                                                  SCREEN_HEIGHT))
         # Батч для текста.
-        self.batch = Batch()
         title = arcade.Text("Поздравляем с прохождением игры!",
-                            SCREEN_WIDTH - 2500, SCREEN_HEIGHT - 1300,
+                            SCREEN_WIDTH - 2700, SCREEN_HEIGHT - 1300,
                             arcade.color.WHITE, 30,
-                            anchor_x="center", batch=self.batch)
+                            anchor_x="center").draw()
         title1 = arcade.Text("Нажми SPACE, чтобы начать еще раз!",
-                             SCREEN_WIDTH - 2400,
+                             SCREEN_WIDTH - 2600,
                              SCREEN_HEIGHT - 1700,
                              arcade.color.WHITE,
                              font_size=48,
                              anchor_x="center",
-                             anchor_y="center", batch=self.batch)
-        self.batch.draw()
+                             anchor_y="center").draw()
 
     def on_key_press(self, key, modifiers):
         # при нажатии запускается основная игра
