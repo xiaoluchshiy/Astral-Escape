@@ -7,7 +7,7 @@ from pyglet.graphics import Batch
 SCREEN_WIDTH = 3000
 SCREEN_HEIGHT = 2000
 SCREEN_TITLE = "Astral Escape"
-PLAYER_SPEED = 1500
+PLAYER_SPEED = 150
 ANIMATION_SPEED = 0.085
 
 
@@ -332,27 +332,41 @@ class Astral_Escape(arcade.View):
 class FinalView(arcade.View):
     def __init__(self):
         super().__init__()
-        # устанавливаем фон
         self.background = arcade.load_texture("images/space.png")
 
     def on_draw(self):
-        """Отрисовка начального экрана"""
+        self.window.use()
         self.clear()
-        arcade.draw_texture_rect(self.background,
-                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
-                                                  SCREEN_HEIGHT))
-        # Батч для текста.
-        title = arcade.Text("Поздравляем с прохождением игры!",
-                            SCREEN_WIDTH - 2700, SCREEN_HEIGHT - 1300,
-                            arcade.color.WHITE, 30,
-                            anchor_x="center").draw()
-        title1 = arcade.Text("Нажми SPACE, чтобы начать еще раз!",
-                             SCREEN_WIDTH - 2600,
-                             SCREEN_HEIGHT - 1700,
-                             arcade.color.WHITE,
-                             font_size=48,
-                             anchor_x="center",
-                             anchor_y="center").draw()
+
+        # Фон
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.rect.XYWH(
+                self.window.width // 2,
+                self.window.height // 2,
+                self.window.width,
+                self.window.height
+            )
+        )
+
+        # Текст: используем x, y (не start_x/start_y!)
+        arcade.Text(
+            "Поздравляем с прохождением игры!",
+            x=self.window.width // 2,
+            y=self.window.height // 2 + 50,
+            color=arcade.color.WHITE,
+            font_size=30,
+            anchor_x="center"
+        ).draw()
+
+        arcade.Text(
+            "Нажми SPACE, чтобы начать еще раз!",
+            x=self.window.width // 2,
+            y=self.window.height // 2 - 50,
+            color=arcade.color.WHITE,
+            font_size=24,
+            anchor_x="center"
+        ).draw()
 
     def on_key_press(self, key, modifiers):
         # при нажатии запускается основная игра
