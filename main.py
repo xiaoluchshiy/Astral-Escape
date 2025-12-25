@@ -1,8 +1,5 @@
-import arcade
 from devices import *
-import random
 from alert import PressE
-from arcade.gui import UIManager, UIAnchorLayout, UIBoxLayout, UILabel, UIDropdown
 from pyglet.graphics import Batch
 
 # Константы

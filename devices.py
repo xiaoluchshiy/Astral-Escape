@@ -1,7 +1,4 @@
-import math
-from math import degrees
-from arcade.particles import FadeParticle, Emitter, EmitBurst, EmitInterval, EmitMaintainCount
-from pyglet.graphics import Batch
+from arcade.particles import FadeParticle, Emitter, EmitBurst
 import arcade
 import random
 
