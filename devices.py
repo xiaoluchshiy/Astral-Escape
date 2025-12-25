@@ -3,7 +3,6 @@ from arcade.particles import FadeParticle, Emitter, EmitBurst, EmitInterval, Emi
 from pyglet.graphics import Batch
 import arcade
 import random
-from dataclasses import dataclass
 
 SPARK_TEX = [
     arcade.make_soft_circle_texture(8, arcade.color.RED),
