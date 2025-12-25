@@ -87,6 +87,7 @@ class Device(arcade.Sprite):
         pass
 
 
+# класс для камеры безопасности 
 class Camera(Device):
     def __init__(self, x, y, max_degrees):
         super().__init__(x, y)
