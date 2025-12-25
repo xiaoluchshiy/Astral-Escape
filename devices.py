@@ -105,7 +105,6 @@ class Camera(Device):
         self.radius_angle = 0
         self.radius_rotation_speed = 20
         self.radius_direction = 1
-        self.radius_length = 200
         self.is_hacked = False
         self.emitters = []
 
@@ -126,12 +125,14 @@ class Camera(Device):
                 self.radius_direction = -1
             elif self.radius_angle <= -self.max_angle:
                 self.radius_direction = 1
-        rad = math.radians(self.radius_angle)
-        offset_x = math.cos(rad) * (self.radius_length / 2)
-        offset_y = math.sin(rad) * (self.radius_length / 2)
-        self.radius_sprite.center_x = self.center_x + offset_x
-        self.radius_sprite.center_y = self.center_y + offset_y
-        self.radius_sprite.angle = self.radius_angle
+        if not self.is_hacked:
+            cone_width = self.radius_sprite.width
+            rad = math.radians(self.radius_angle)
+            offset_x = -(cone_width / 2) * math.cos(rad)
+            offset_y = -(cone_width / 2) * math.sin(rad)
+            self.radius_sprite.center_x = self.center_x + offset_x + cone_width - 20
+            self.radius_sprite.center_y = self.center_y + offset_y
+            self.radius_sprite.angle = self.radius_angle
         emitters_copy = self.emitters.copy()
         for e in emitters_copy:
             e.update(delta_time)
