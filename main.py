@@ -7,7 +7,7 @@ from pyglet.graphics import Batch
 SCREEN_WIDTH = 3000
 SCREEN_HEIGHT = 2000
 SCREEN_TITLE = "Astral Escape"
-PLAYER_SPEED = 150
+PLAYER_SPEED = 300
 ANIMATION_SPEED = 0.085
 
 
@@ -334,46 +334,18 @@ class FinalView(arcade.View):
         super().__init__()
         self.background = arcade.load_texture("images/space.png")
 
+    def on_show_view(self):
+        pass
+
     def on_draw(self):
-        self.window.use()
-        self.clear()
-
-        # Фон
-        arcade.draw_texture_rect(
-            self.background,
-            arcade.rect.XYWH(
-                self.window.width // 2,
-                self.window.height // 2,
-                self.window.width,
-                self.window.height
-            )
-        )
-
-        # Текст: используем x, y (не start_x/start_y!)
-        arcade.Text(
-            "Поздравляем с прохождением игры!",
-            x=self.window.width // 2,
-            y=self.window.height // 2 + 50,
-            color=arcade.color.WHITE,
-            font_size=30,
-            anchor_x="center"
-        ).draw()
-
-        arcade.Text(
-            "Нажми SPACE, чтобы начать еще раз!",
-            x=self.window.width // 2,
-            y=self.window.height // 2 - 50,
-            color=arcade.color.WHITE,
-            font_size=24,
-            anchor_x="center"
-        ).draw()
+        pass
 
     def on_key_press(self, key, modifiers):
-        # при нажатии запускается основная игра
-        if key == arcade.key.SPACE:
-            game_view = Astral_Escape()
-            game_view.setup()
-            self.window.show_view(game_view)
+            # при нажатии запускается основная игра
+            if key == arcade.key.SPACE:
+                game_view = Astral_Escape()
+                game_view.setup()
+                self.window.show_view(game_view)
 
 
 def main():
