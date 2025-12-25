@@ -1,8 +1,6 @@
+from devices import *
 import arcade
-from devices import Camera, Button
-import random
 from alert import PressE
-
 from pyglet.graphics import Batch
 
 # Константы
@@ -14,6 +12,7 @@ ANIMATION_SPEED = 0.085
 
 
 class Player(arcade.Sprite):
+    # создаем игрока
     def __init__(self):
         super().__init__()
         self.scale = 0.08
@@ -28,25 +27,30 @@ class Player(arcade.Sprite):
         self.texture = arcade.load_texture("images/player/player_back1.png")
 
         self.textures_forward = []
+        # текстуры для ходьбы вперед
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_forward{i}.png')
             self.textures_forward.append(texture)
 
         self.textures_back = []
+        # текстуры для ходьбы назад
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_back{i}.png')
             self.textures_back.append(texture)
 
         self.textures_left = []
+        # для ходьбы влево
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_left{i}.png')
             self.textures_left.append(texture)
 
         self.textures_right = []
+        # для ходьбы вправо
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_left{i}.png').flip_left_right()
             self.textures_right.append(texture)
 
+        # астральная
         self.astral_texture_left = arcade.load_texture("images/player/player_astral_left.png").flip_left_right()
         self.astral_texture_right = arcade.load_texture("images/player/player_astral_left.png")
         self.astral_texture_back = arcade.load_texture("images/player/player_astral_back.png")
@@ -82,9 +86,33 @@ class Player(arcade.Sprite):
         self.is_walking = self.center_x != old_x or self.center_y != old_y
 
 
-class Astral_Escape(arcade.Window):
-    def __init__(self, width, height, title):
-        super().__init__(width, height, title)
+class StartView(arcade.View):
+    def on_draw(self):
+        """Отрисовка начального экрана"""
+        self.clear()
+        self.batch = Batch()
+        title = arcade.Text("Нажми SPACE, чтобы начать!",
+                            SCREEN_WIDTH - 2400,
+                            SCREEN_HEIGHT - 1400,
+                            arcade.color.WHITE,
+                            font_size=48,
+                            anchor_x="center",
+                            anchor_y="center", batch=self.batch)
+
+        self.batch.draw()
+
+    def on_key_press(self, key, modifiers):
+        # при нажатии запускается основная игра
+        if key == arcade.key.SPACE:
+            game_view = Astral_Escape()
+            game_view.setup()
+            self.window.show_view(game_view)
+
+
+class Astral_Escape(arcade.View):
+    def __init__(self):
+        super().__init__()
+        # устанавливаем фон
         self.background = arcade.load_texture("images/space.png")
         self.track_h = 2
         self.track_v = 2
@@ -103,7 +131,9 @@ class Astral_Escape(arcade.Window):
         self.alerts = arcade.SpriteList()
         self.alerts.append(self.cam_alert)
         self.devices = arcade.SpriteList()
+        self.radius_sprites = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
+        camera.radius_sprite_list = self.radius_sprites
         button = Button(1110, 809)
         self.devices.append(camera)
         self.devices.append(button)
@@ -119,12 +149,19 @@ class Astral_Escape(arcade.Window):
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
         self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
-
+        # звук
         self.sound_timer = 0
         self.explosion_sound = arcade.load_sound("music.wav")
 
         self.current_texture = 0
         self.texture_change_time = 0
+        robot = Robot(
+            x=800, y=1100,
+            point_a=(800, 1100),
+            point_b=(1000, 1100),
+        )
+        self.devices.append(robot)
+        self.radius_sprites.append(camera.radius_sprite)
 
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
@@ -172,8 +209,10 @@ class Astral_Escape(arcade.Window):
         self.clear()
         # Отрисовка фона
         arcade.draw_texture_rect(self.background,
-                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT))
+                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
+                                                  SCREEN_HEIGHT))
         self.wall_list.draw()
+        self.radius_sprites.draw()
         if self.door:
             self.door_list.draw()
             self.door_collision_list.draw()
@@ -184,16 +223,21 @@ class Astral_Escape(arcade.Window):
             self.astral_list.draw()
         self.devices.draw()
         self.player_list.draw()
-        for device in self.devices:
-            if not device.is_hacked:
-                device.draw_radius()
         if self.current_device:
             self.alerts.draw()
         self.world_camera.use()
+        for device in self.devices:
+            if hasattr(device, 'emitters'):
+                for emitter in device.emitters:
+                    emitter.draw()
 
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
         self.cam_alert.center_x = self.player.center_x
+        if not self.player.astral_form:  # только в физической форме
+            for radius in self.radius_sprites:
+                if arcade.check_for_collision(self.player, radius):
+                    self.setup()
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
@@ -265,14 +309,12 @@ class Astral_Escape(arcade.Window):
             self.track_h = 2
 
 
-def setup_game(width=1200, height=800, title="Astral Escape"):
-    game = Astral_Escape(width, height, title)
-    game.setup()
-    return game
-
-
 def main():
-    setup_game(1200, 800, SCREEN_TITLE)
+    window = arcade.Window(1200, 800, SCREEN_TITLE)
+    start_view = StartView()
+    game_view = Astral_Escape()
+    game_view.setup()
+    window.show_view(start_view)
     arcade.run()
 
 
