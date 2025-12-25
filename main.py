@@ -131,6 +131,7 @@ class Astral_Escape(arcade.View):
         self.alerts = arcade.SpriteList()
         self.alerts.append(self.cam_alert)
         self.devices = arcade.SpriteList()
+        self.robots = arcade.SpriteList()
         self.radius_sprites = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
         camera.radius_sprite_list = self.radius_sprites
@@ -160,6 +161,7 @@ class Astral_Escape(arcade.View):
             point_a=(800, 1100),
             point_b=(1000, 1100),
         )
+        self.robots.append(robot)
         self.devices.append(robot)
         self.radius_sprites.append(camera.radius_sprite)
 
@@ -238,6 +240,9 @@ class Astral_Escape(arcade.View):
             for radius in self.radius_sprites:
                 if arcade.check_for_collision(self.player, radius):
                     self.setup()
+        for robot in self.robots:
+            if arcade.check_for_collision(self.player, robot):
+                self.setup()
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
