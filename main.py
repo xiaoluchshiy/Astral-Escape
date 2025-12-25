@@ -322,6 +322,33 @@ class Astral_Escape(arcade.View):
             self.track_h = 2
 
 
+class FinalView(arcade.View):
+    def on_draw(self):
+        """Отрисовка начального экрана"""
+        self.clear()
+        # Батч для текста.
+        self.batch = Batch()
+        title = arcade.Text("Поздравляем с прохождением игры!",
+                            SCREEN_WIDTH - 2500, SCREEN_HEIGHT - 1300,
+                            arcade.color.WHITE, 30,
+                            anchor_x="center", batch=self.batch)
+        title1 = arcade.Text("Нажми SPACE, чтобы начать еще раз!",
+                             SCREEN_WIDTH - 2400,
+                             SCREEN_HEIGHT - 1700,
+                             arcade.color.WHITE,
+                             font_size=48,
+                             anchor_x="center",
+                             anchor_y="center", batch=self.batch)
+        self.batch.draw()
+
+    def on_key_press(self, key, modifiers):
+        # при нажатии запускается основная игра
+        if key == arcade.key.SPACE:
+            game_view = Astral_Escape()
+            game_view.setup()
+            self.window.show_view(game_view)
+
+
 def main():
     window = arcade.Window(1200, 800, SCREEN_TITLE)
     start_view = StartView()
