@@ -12,7 +12,7 @@ ANIMATION_SPEED = 0.085
 
 
 class Player(arcade.Sprite):
-    # создаем игрока 
+    # создаем игрока
     def __init__(self):
         super().__init__()
         self.scale = 0.08
@@ -27,21 +27,25 @@ class Player(arcade.Sprite):
         self.texture = arcade.load_texture("images/player/player_back1.png")
 
         self.textures_forward = []
+        # текстуры для ходьбы вперед
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_forward{i}.png')
             self.textures_forward.append(texture)
 
         self.textures_back = []
+        # текстуры для ходьбы назад
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_back{i}.png')
             self.textures_back.append(texture)
 
         self.textures_left = []
+        # для ходьбы влево
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_left{i}.png')
             self.textures_left.append(texture)
 
         self.textures_right = []
+        # для ходьбы вправо
         for i in range(3):
             texture = arcade.load_texture(f'images/player/player_left{i}.png').flip_left_right()
             self.textures_right.append(texture)
