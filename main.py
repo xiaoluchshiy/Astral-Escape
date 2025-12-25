@@ -81,6 +81,7 @@ class Player(arcade.Sprite):
 
         self.is_walking = self.center_x != old_x or self.center_y != old_y
 
+
 class Astral_Escape(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
@@ -92,6 +93,7 @@ class Astral_Escape(arcade.Window):
         self.devices = None
         self.current_device = None
         self.world_camera = arcade.camera.Camera2D()
+        self.game_state = "menu"
 
     def setup(self):
         # Создание объектов
@@ -170,29 +172,44 @@ class Astral_Escape(arcade.Window):
     def on_draw(self):
         self.clear()
         # Отрисовка фона
-        arcade.draw_texture_rect(self.background,
-                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.wall_list.draw()
-        if self.door:
-            self.door_list.draw()
-            self.door_collision_list.draw()
-        if self.player.astral_form:
-            arcade.draw_texture_rect(self.player.texture_right,
-                                     arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
-                                                      80))
-            self.astral_list.draw()
-        self.devices.draw()
-        self.player_list.draw()
-        for device in self.devices:
-            if not device.is_hacked:
-                device.draw_radius()
-        if self.current_device:
-            self.alerts.draw()
-        self.world_camera.use()
-        for device in self.devices:
-            if hasattr(device, 'emitters'):
-                for emitter in device.emitters:
-                    emitter.draw()
+        if self.game_state == "menu":
+            arcade.draw_texture_rect(
+                self.background,
+                arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT)
+            )
+            arcade.draw_text(
+                "Нажми SPACE, чтобы начать!",
+                SCREEN_WIDTH - 2400,
+                SCREEN_HEIGHT - 1450,
+                arcade.color.WHITE,
+                font_size=48,
+                anchor_x="center",
+                anchor_y="center"
+            )
+        else:
+            arcade.draw_texture_rect(self.background,
+                                     arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT))
+            self.wall_list.draw()
+            if self.door:
+                self.door_list.draw()
+                self.door_collision_list.draw()
+            if self.player.astral_form:
+                arcade.draw_texture_rect(self.player.texture_right,
+                                         arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
+                                                          80))
+                self.astral_list.draw()
+            self.devices.draw()
+            self.player_list.draw()
+            for device in self.devices:
+                if not device.is_hacked:
+                    device.draw_radius()
+            if self.current_device:
+                self.alerts.draw()
+            self.world_camera.use()
+            for device in self.devices:
+                if hasattr(device, 'emitters'):
+                    for emitter in device.emitters:
+                        emitter.draw()
 
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
@@ -208,7 +225,7 @@ class Astral_Escape(arcade.Window):
             self.door_physics_engine.update()
         if not self.player.astral_form:
             self.astral_physics_engine.update()
-        if  self.player.astral_form:
+        if self.player.astral_form:
             if self.track_h == 1:
                 self.player.texture = self.player.astral_texture_left
             if self.track_h == 0:
@@ -230,6 +247,12 @@ class Astral_Escape(arcade.Window):
         self.world_camera.position = arcade.math.lerp_2d(self.world_camera.position, position, 0.12)
 
     def on_key_press(self, key, modifiers):
+        if self.game_state == "menu":
+            if key == arcade.key.SPACE:
+                self.game_state = "game"
+                if not hasattr(self, 'player'):
+                    self.setup()
+            return
         if key == arcade.key.W:
             self.player.change_y = 1
             self.track_v = 1
