@@ -2,7 +2,57 @@ from math import degrees
 from arcade.particles import FadeParticle, Emitter, EmitBurst, EmitInterval, EmitMaintainCount
 from pyglet.graphics import Batch
 import arcade
+import random
+from dataclasses import dataclass
 
+SPARK_TEX = [
+    arcade.make_soft_circle_texture(8, arcade.color.RED),
+    arcade.make_soft_circle_texture(8, arcade.color.RED),
+    arcade.make_soft_circle_texture(8, arcade.color.RED),
+    arcade.make_soft_circle_texture(8, arcade.color.RED),
+]
+SMOKE_TEX = arcade.make_soft_circle_texture(20, arcade.color.LIGHT_GRAY, 255, 80)
+
+def gravity_drag(p):  # Для искр: чуть вниз и затухание скорости
+    p.change_y += -0.03
+    p.change_x *= 0.92
+    p.change_y *= 0.92
+
+
+def smoke_mutator(p):  # Дым раздувается и плавно исчезает
+    p.scale_x *= 1.02
+    p.scale_y *= 1.02
+    p.alpha = max(0, p.alpha - 2)
+
+def make_smoke_puff(x, y):
+    # Короткий «пых» дыма: медленно плывёт и распухает
+    return Emitter(
+        center_xy=(x, y),
+        emit_controller=EmitBurst(12),
+        particle_factory=lambda e: FadeParticle(
+            filename_or_texture=SMOKE_TEX,
+            change_xy=arcade.math.rand_in_circle((0.0, 0.0), 0.6),
+            lifetime=random.uniform(1.5, 2.5),
+            start_alpha=200, end_alpha=0,
+            scale=random.uniform(0.6, 0.9),
+            mutation_callback=smoke_mutator,
+        ),
+    )
+
+def make_explosion(x, y, count=80):
+    # Разовый взрыв с искрами во все стороны
+    return Emitter(
+        center_xy=(x, y),
+        emit_controller=EmitBurst(count),
+        particle_factory=lambda e: FadeParticle(
+            filename_or_texture=random.choice(SPARK_TEX),
+            change_xy=arcade.math.rand_in_circle((0.0, 0.0), 9.0),
+            lifetime=random.uniform(0.5, 1.1),
+            start_alpha=255, end_alpha=0,
+            scale=random.uniform(0.35, 0.6),
+            mutation_callback=gravity_drag,
+        ),
+    )
 
 class Device(arcade.Sprite):
     def __init__(self, x, y):
@@ -47,10 +97,13 @@ class Camera(Device):
         self.radius_rotation_speed = 20
         self.radius_direction = 1
         self.radius_size = 200
+        self.emitters = []
 
     def on_hack(self):
         if self.hacked_texture:
             self.texture = self.hacked_texture
+            self.emitters.append(make_explosion(self.center_x, self.center_y))
+            self.emitters.append(make_smoke_puff(self.center_x, self.center_y))
 
     def update(self, delta_time):
         if not self.is_hacked and self.change_angle:
@@ -65,6 +118,12 @@ class Camera(Device):
             elif self.is_hacked:
                 self.angle = 0
                 self.radius_angle = 0
+            emitters_copy = self.emitters.copy()  # Защищаемся от мутаций списка
+            for e in emitters_copy:
+                e.update(delta_time)
+            for e in emitters_copy:
+                if e.can_reap():  # Готов к уборке?
+                    self.emitters.remove(e)
 
     def draw_radius(self):
         if not self.is_hacked:

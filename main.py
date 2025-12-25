@@ -1,5 +1,5 @@
 import arcade
-from devices import Camera, Button
+from devices import *
 import random
 from alert import PressE
 
@@ -189,6 +189,10 @@ class Astral_Escape(arcade.Window):
         if self.current_device:
             self.alerts.draw()
         self.world_camera.use()
+        for device in self.devices:
+            if hasattr(device, 'emitters'):
+                for emitter in device.emitters:
+                    emitter.draw()
 
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
