@@ -106,6 +106,7 @@ class Astral_Escape(arcade.Window):
         self.devices = arcade.SpriteList()
         self.radius_sprites = arcade.SpriteList()
         camera = Camera(570, 1220, 25)
+        camera.radius_sprite_list = self.radius_sprites
         button = Button(1110, 809)
         self.devices.append(camera)
         self.devices.append(button)

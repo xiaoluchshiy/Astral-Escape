@@ -112,6 +112,8 @@ class Camera(Device):
         if self.hacked_texture:
             self.texture = self.hacked_texture
             self.is_hacked = True
+            if self.radius_sprite in self.radius_sprite_list:
+                self.radius_sprite_list.remove(self.radius_sprite)
             self.emitters.append(make_explosion(self.center_x, self.center_y))
             self.emitters.append(make_smoke_puff(self.center_x, self.center_y))
 
@@ -130,7 +132,7 @@ class Camera(Device):
             rad = math.radians(self.radius_angle)
             offset_x = -(cone_width / 2) * math.cos(rad)
             offset_y = -(cone_width / 2) * math.sin(rad)
-            self.radius_sprite.center_x = self.center_x + offset_x + cone_width - 20
+            self.radius_sprite.center_x = self.center_x + offset_x + cone_width - 22
             self.radius_sprite.center_y = self.center_y + offset_y
             self.radius_sprite.angle = self.radius_angle
         emitters_copy = self.emitters.copy()
