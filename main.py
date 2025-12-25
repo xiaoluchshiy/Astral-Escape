@@ -12,6 +12,7 @@ ANIMATION_SPEED = 0.085
 
 
 class Player(arcade.Sprite):
+    # создаем игрока 
     def __init__(self):
         super().__init__()
         self.scale = 0.08
