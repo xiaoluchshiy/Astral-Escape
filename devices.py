@@ -149,7 +149,7 @@ class Robot(Device):
     def __init__(self, x, y, point_a, point_b, speed=60.0):
         super().__init__(x, y)
         self.texture = arcade.load_texture("images/devices/robot.png")
-        self.scale = 0.12
+        self.scale = 0.08
         self.is_hackable = False
         self.point_a = point_a
         self.point_b = point_b
