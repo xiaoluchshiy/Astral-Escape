@@ -1,4 +1,5 @@
 from devices import *
+import arcade
 from alert import PressE
 from pyglet.graphics import Batch
 
