@@ -102,6 +102,7 @@ class StartView(arcade.View):
         self.batch.draw()
 
     def on_key_press(self, key, modifiers):
+        # при нажатии запускается основная игра
         if key == arcade.key.SPACE:
             game_view = Astral_Escape()
             game_view.setup()
