@@ -50,6 +50,7 @@ class Player(arcade.Sprite):
             texture = arcade.load_texture(f'images/player/player_left{i}.png').flip_left_right()
             self.textures_right.append(texture)
 
+        # астральная
         self.astral_texture_left = arcade.load_texture("images/player/player_astral_left.png").flip_left_right()
         self.astral_texture_right = arcade.load_texture("images/player/player_astral_left.png")
         self.astral_texture_back = arcade.load_texture("images/player/player_astral_back.png")
