@@ -97,7 +97,6 @@ class Camera(Device):
         self.radius_sprite.center_x = x
         self.radius_sprite.center_y = y
 
-        self.change_angle = True
         self.rotation_speed = 20
         self.rotation_direction = 1
         self.max_angle = max_degrees
@@ -118,7 +117,7 @@ class Camera(Device):
             self.emitters.append(make_smoke_puff(self.center_x, self.center_y))
 
     def update(self, delta_time):
-        if not self.is_hacked and self.change_angle:
+        if not self.is_hacked:
             self.angle += self.rotation_speed * delta_time * self.rotation_direction
             if abs(self.angle) >= self.max_angle:
                 self.rotation_direction *= -1
@@ -128,21 +127,20 @@ class Camera(Device):
             elif self.radius_angle <= -self.max_angle:
                 self.radius_direction = 1
         if not self.is_hacked:
-            cone_width = self.radius_sprite.width
-            rad = math.radians(self.radius_angle)
-            offset_x = -(cone_width / 2) * math.cos(rad)
-            offset_y = -(cone_width / 2) * math.sin(rad)
-            self.radius_sprite.center_x = self.center_x + offset_x + cone_width - 22
-            self.radius_sprite.center_y = self.center_y + offset_y
-            self.radius_sprite.angle = self.radius_angle
+            if not self.is_hacked:
+                self.radius_sprite.angle += self.rotation_speed * delta_time * self.rotation_direction
+                if abs(self.radius_sprite.angle) >= self.max_angle:
+                    self.rotation_direction *= -1
+                self.radius_angle += self.radius_rotation_speed * delta_time * self.radius_direction
+                if self.radius_angle >= self.max_angle:
+                    self.radius_direction = -1
+                elif self.radius_angle <= -self.max_angle:
+                    self.radius_direction = 1
         emitters_copy = self.emitters.copy()
         for e in emitters_copy:
             e.update(delta_time)
             if e.can_reap():
                 self.emitters.remove(e)
-
-    def draw_radius(self):
-        pass
 
 
 class Robot(Device):
@@ -171,8 +169,6 @@ class Robot(Device):
             else:
                 self.target = self.point_b
 
-    def draw_radius(self):
-        pass
 
 
 class Button(Device):
@@ -182,5 +178,3 @@ class Button(Device):
         self.scale = 0.07
         self.is_hackable = True
 
-    def draw_radius(self):
-        pass

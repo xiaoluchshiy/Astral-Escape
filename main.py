@@ -82,9 +82,31 @@ class Player(arcade.Sprite):
         self.is_walking = self.center_x != old_x or self.center_y != old_y
 
 
-class Astral_Escape(arcade.Window):
-    def __init__(self, width, height, title):
-        super().__init__(width, height, title)
+class StartView(arcade.View):
+    def on_draw(self):
+        """Отрисовка начального экрана"""
+        self.clear()
+        self.batch = Batch()
+        title = arcade.Text("Нажми SPACE, чтобы начать!",
+            SCREEN_WIDTH - 2400,
+            SCREEN_HEIGHT - 1400,
+            arcade.color.WHITE,
+            font_size=48,
+            anchor_x="center",
+            anchor_y="center", batch=self.batch)
+
+        self.batch.draw()
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.SPACE:
+            game_view = Astral_Escape()
+            game_view.setup()
+            self.window.show_view(game_view)
+
+
+class Astral_Escape(arcade.View):
+    def __init__(self):
+        super().__init__()
         self.background = arcade.load_texture("images/space.png")
         self.track_h = 2
         self.track_v = 2
@@ -93,7 +115,6 @@ class Astral_Escape(arcade.Window):
         self.devices = None
         self.current_device = None
         self.world_camera = arcade.camera.Camera2D()
-        self.game_state = "menu"
 
     def setup(self):
         # Создание объектов
@@ -181,46 +202,28 @@ class Astral_Escape(arcade.Window):
     def on_draw(self):
         self.clear()
         # Отрисовка фона
-        if self.game_state == "menu":
-            arcade.draw_texture_rect(
-                self.background,
-                arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT)
-            )
-            arcade.draw_text(
-                "Нажми SPACE, чтобы начать!",
-                SCREEN_WIDTH - 2400,
-                SCREEN_HEIGHT - 1450,
-                arcade.color.WHITE,
-                font_size=48,
-                anchor_x="center",
-                anchor_y="center"
-            )
-        else:
-            arcade.draw_texture_rect(self.background,
-                                     arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
-                                                      SCREEN_HEIGHT))
-            self.wall_list.draw()
-            self.radius_sprites.draw()
-            if self.door:
-                self.door_list.draw()
-                self.door_collision_list.draw()
-            if self.player.astral_form:
-                arcade.draw_texture_rect(self.player.texture_right,
-                                         arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
-                                                          80))
-                self.astral_list.draw()
-            self.devices.draw()
-            self.player_list.draw()
-            for device in self.devices:
-                if not device.is_hacked:
-                    device.draw_radius()
-            if self.current_device:
-                self.alerts.draw()
-            self.world_camera.use()
-            for device in self.devices:
-                if hasattr(device, 'emitters'):
-                    for emitter in device.emitters:
-                        emitter.draw()
+        arcade.draw_texture_rect(self.background,
+                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
+                                                  SCREEN_HEIGHT))
+        self.wall_list.draw()
+        self.radius_sprites.draw()
+        if self.door:
+            self.door_list.draw()
+            self.door_collision_list.draw()
+        if self.player.astral_form:
+            arcade.draw_texture_rect(self.player.texture_right,
+                                     arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
+                                                      80))
+            self.astral_list.draw()
+        self.devices.draw()
+        self.player_list.draw()
+        if self.current_device:
+            self.alerts.draw()
+        self.world_camera.use()
+        for device in self.devices:
+            if hasattr(device, 'emitters'):
+                for emitter in device.emitters:
+                    emitter.draw()
 
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
@@ -262,12 +265,6 @@ class Astral_Escape(arcade.Window):
         self.world_camera.position = arcade.math.lerp_2d(self.world_camera.position, position, 0.12)
 
     def on_key_press(self, key, modifiers):
-        if self.game_state == "menu":
-            if key == arcade.key.SPACE:
-                self.game_state = "game"
-                if not hasattr(self, 'player'):
-                    self.setup()
-            return
         if key == arcade.key.W:
             self.player.change_y = 1
             self.track_v = 1
@@ -306,14 +303,12 @@ class Astral_Escape(arcade.Window):
             self.track_h = 2
 
 
-def setup_game(width=1200, height=800, title="Astral Escape"):
-    game = Astral_Escape(width, height, title)
-    game.setup()
-    return game
-
-
 def main():
-    setup_game(1200, 800, SCREEN_TITLE)
+    window = arcade.Window(1200, 800, SCREEN_TITLE)
+    start_view = StartView()
+    game_view = Astral_Escape()
+    game_view.setup()
+    window.show_view(start_view)
     arcade.run()
 
 
