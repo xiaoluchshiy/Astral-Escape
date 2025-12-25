@@ -350,7 +350,7 @@ class FinalView(arcade.View):
 
 def main():
     window = arcade.Window(1200, 800, SCREEN_TITLE)
-    start_view = StartView()
+    start_view = StartView()  # запускаем стартовое окно
     game_view = Astral_Escape()
     game_view.setup()
     window.show_view(start_view)
