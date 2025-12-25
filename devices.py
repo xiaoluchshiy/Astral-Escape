@@ -118,11 +118,11 @@ class Camera(Device):
             elif self.is_hacked:
                 self.angle = 0
                 self.radius_angle = 0
-            emitters_copy = self.emitters.copy()  # Защищаемся от мутаций списка
+            emitters_copy = self.emitters.copy()  
             for e in emitters_copy:
                 e.update(delta_time)
             for e in emitters_copy:
-                if e.can_reap():  # Готов к уборке?
+                if e.can_reap():
                     self.emitters.remove(e)
 
     def draw_radius(self):
