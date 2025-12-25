@@ -126,6 +126,12 @@ class Astral_Escape(arcade.Window):
 
         self.current_texture = 0
         self.texture_change_time = 0
+        robot = Robot(
+            x=800, y=1100,
+            point_a=(800, 1100),
+            point_b=(1000, 1100),
+        )
+        self.devices.append(robot)
 
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
@@ -188,7 +194,8 @@ class Astral_Escape(arcade.Window):
             )
         else:
             arcade.draw_texture_rect(self.background,
-                                     arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT))
+                                     arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
+                                                      SCREEN_HEIGHT))
             self.wall_list.draw()
             if self.door:
                 self.door_list.draw()

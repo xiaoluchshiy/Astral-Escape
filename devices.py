@@ -12,6 +12,7 @@ SPARK_TEX = [
 ]
 SMOKE_TEX = arcade.make_soft_circle_texture(20, arcade.color.LIGHT_GRAY, 255, 80)
 
+
 def gravity_drag(p):  # Для искр: чуть вниз и затухание скорости
     p.change_y += -0.03
     p.change_x *= 0.92
@@ -22,6 +23,7 @@ def smoke_mutator(p):  # Дым раздувается и плавно исче�
     p.scale_x *= 1.02
     p.scale_y *= 1.02
     p.alpha = max(0, p.alpha - 2)
+
 
 def make_smoke_puff(x, y):
     # Короткий «пых» дыма: медленно плывёт и распухает
@@ -38,6 +40,7 @@ def make_smoke_puff(x, y):
         ),
     )
 
+
 def make_explosion(x, y, count=80):
     # Разовый взрыв с искрами во все стороны
     return Emitter(
@@ -52,6 +55,7 @@ def make_explosion(x, y, count=80):
             mutation_callback=gravity_drag,
         ),
     )
+
 
 class Device(arcade.Sprite):
     def __init__(self, x, y):
@@ -138,6 +142,36 @@ class Camera(Device):
             )
         else:
             pass
+
+
+class Robot(Device):
+    def __init__(self, x, y, point_a, point_b, speed=60.0):
+        super().__init__(x, y)
+        self.texture = arcade.load_texture("images/devices/robot.png")
+        self.scale = 0.12
+        self.is_hackable = False
+        self.point_a = point_a
+        self.point_b = point_b
+        self.speed = speed
+        self.target = self.point_b
+        self.center_x = x
+        self.center_y = y
+
+    def update(self, delta_time):
+        dx = self.target[0] - self.center_x
+        dy = self.target[1] - self.center_y
+        dist = (dx ** 2 + dy ** 2) ** 0.5
+        if dist > 0:
+            self.center_x += (dx / dist) * self.speed * delta_time
+            self.center_y += (dy / dist) * self.speed * delta_time
+        if dist < 5:
+            if self.target == self.point_b:
+                self.target = self.point_a
+            else:
+                self.target = self.point_b
+
+    def draw_radius(self):
+        pass
 
 
 class Button(Device):
