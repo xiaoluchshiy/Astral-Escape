@@ -136,6 +136,8 @@ class Astral_Escape(arcade.View):
         camera = Camera(570, 1220, 25)
         camera.radius_sprite_list = self.radius_sprites
         button = Button(1110, 809)
+        self.buttons = arcade.SpriteList()
+        self.buttons.append(button)
         self.devices.append(camera)
         self.devices.append(button)
         self.wall_list = arcade.SpriteList()
@@ -215,9 +217,10 @@ class Astral_Escape(arcade.View):
                                                   SCREEN_HEIGHT))
         self.wall_list.draw()
         self.radius_sprites.draw()
-        if self.door:
-            self.door_list.draw()
-            self.door_collision_list.draw()
+        for button in self.buttons:
+            if self.door and button.is_hackable:
+                self.door_list.draw()
+                self.door_collision_list.draw()
         if self.player.astral_form:
             arcade.draw_texture_rect(self.player.texture_right,
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
@@ -243,17 +246,22 @@ class Astral_Escape(arcade.View):
         for robot in self.robots:
             if arcade.check_for_collision(self.player, robot):
                 self.setup()
+
         if self.sound_timer == 0:
             self.explosion_sound.play()
         if self.sound_timer >= 120:
             self.sound_timer = 0
+
         self.sound_timer += delta_time
         self.physics_engine.update()
         self.update_animation()
-        if self.door:
-            self.door_physics_engine.update()
+
+        for button in self.buttons:
+            if self.door and button.is_hackable:
+                self.door_physics_engine.update()
         if not self.player.astral_form:
             self.astral_physics_engine.update()
+
         if self.player.astral_form:
             if self.track_h == 1:
                 self.player.texture = self.player.astral_texture_left
