@@ -2,12 +2,15 @@ from arcade.particles import FadeParticle, Emitter, EmitBurst
 import arcade
 import random
 
+# искорки от взлома камеры
 SPARK_TEX = [
     arcade.make_soft_circle_texture(8, arcade.color.RED),
     arcade.make_soft_circle_texture(8, arcade.color.RED),
     arcade.make_soft_circle_texture(8, arcade.color.RED),
     arcade.make_soft_circle_texture(8, arcade.color.RED),
 ]
+
+# дым
 SMOKE_TEX = arcade.make_soft_circle_texture(20, arcade.color.LIGHT_GRAY, 255, 80)
 
 
@@ -55,6 +58,7 @@ def make_explosion(x, y, count=80):
     )
 
 
+# общий класс для всех устройств
 class Device(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -65,6 +69,7 @@ class Device(arcade.Sprite):
         self.is_hacked = False
         self.interaction_distance = 50
 
+    # проверка дистанции взаимодействия
     def can_interact(self, player_x, player_y):
         distance = ((self.center_x - player_x) ** 2 +
                     (self.center_y - player_y) ** 2) ** 0.5
@@ -167,11 +172,9 @@ class Robot(Device):
                 self.target = self.point_b
 
 
-
 class Button(Device):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.texture = arcade.load_texture('images/devices/button.png')
         self.scale = 0.07
         self.is_hackable = True
-

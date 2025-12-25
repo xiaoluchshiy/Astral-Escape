@@ -92,12 +92,12 @@ class StartView(arcade.View):
         self.clear()
         self.batch = Batch()
         title = arcade.Text("Нажми SPACE, чтобы начать!",
-            SCREEN_WIDTH - 2400,
-            SCREEN_HEIGHT - 1400,
-            arcade.color.WHITE,
-            font_size=48,
-            anchor_x="center",
-            anchor_y="center", batch=self.batch)
+                            SCREEN_WIDTH - 2400,
+                            SCREEN_HEIGHT - 1400,
+                            arcade.color.WHITE,
+                            font_size=48,
+                            anchor_x="center",
+                            anchor_y="center", batch=self.batch)
 
         self.batch.draw()
 
@@ -112,6 +112,7 @@ class StartView(arcade.View):
 class Astral_Escape(arcade.View):
     def __init__(self):
         super().__init__()
+        # устанавливаем фон
         self.background = arcade.load_texture("images/space.png")
         self.track_h = 2
         self.track_v = 2
@@ -148,7 +149,7 @@ class Astral_Escape(arcade.View):
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_list)
         self.astral_physics_engine = arcade.PhysicsEngineSimple(self.player, self.astral_collision_list)
         self.door_physics_engine = arcade.PhysicsEngineSimple(self.player, self.door_collision_list)
-
+        # звук
         self.sound_timer = 0
         self.explosion_sound = arcade.load_sound("music.wav")
 
