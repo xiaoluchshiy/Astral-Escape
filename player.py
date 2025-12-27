@@ -1,4 +1,5 @@
 from main import *
+import arcade
 
 class Player(arcade.Sprite):
     # создаем игрока
