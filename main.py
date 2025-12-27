@@ -9,7 +9,7 @@ from pyglet.graphics import Batch
 SCREEN_WIDTH = 3000
 SCREEN_HEIGHT = 2000
 SCREEN_TITLE = "Astral Escape"
-PLAYER_SPEED = 150
+PLAYER_SPEED = 300
 ANIMATION_SPEED = 0.085
 
 class Minigame(arcade.View):
@@ -23,6 +23,8 @@ class Minigame(arcade.View):
         self.current_time = 0
         self.user_input = ""
         self.message = ''
+        self.batch = Batch()
+        self.batch1 = Batch()
 
     def setup(self):
         pass
@@ -33,32 +35,40 @@ class Minigame(arcade.View):
 
     def on_draw(self):
         self.clear()
+        arcade.draw_texture_rect(self.background,
+                                 arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
+                                                  SCREEN_HEIGHT))
         if self.current_time < self.show_time:
-            arcade.draw_text(
+            self.title = arcade.Text(
                 self.code,
                 self.window.width // 2,
                 self.window.height // 2,
                 arcade.color.WHITE,
                 80,
-                anchor_x="center"
+                anchor_x="center",
+                batch=self.batch
             )
+            self.batch.draw()
         else:
-            arcade.draw_text(
+            self.title1 = arcade.Text(
                 f"Ввод: {self.user_input}",
                 self.window.width // 2,
                 self.window.height // 2,
                 arcade.color.YELLOW,
                 40,
-                anchor_x="center"
+                anchor_x="center",
+                batch=self.batch1
             )
-            arcade.draw_text(
+            self.title2 = arcade.Text(
                 "Введи цифры (1-9), ENTER — проверить",
                 self.window.width // 2,
                 self.window.height // 2 - 50,
                 arcade.color.GRAY,
                 16,
-                anchor_x="center"
+                anchor_x="center",
+                batch=self.batch1
             )
+            self.batch1.draw()
             if self.message:
                 color = arcade.color.GREEN if self.message == "Верно!" else arcade.color.RED
                 arcade.draw_text(
@@ -188,6 +198,7 @@ class Astral_Escape_1(arcade.View):
         self.devices = None
         self.current_device = None
         self.batch = Batch()
+        self.batch1 = Batch()
         self.text_info = arcade.Text("WASD — ходьба • E — взаимодействие • Q — астральная форма",
                                      16, 16, arcade.color.WHITE, 14, batch=self.batch)
         self.world_camera = arcade.camera.Camera2D()
@@ -300,6 +311,10 @@ class Astral_Escape_1(arcade.View):
             arcade.draw_texture_rect(self.player.texture_right,
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
                                                       80))
+            self.title1 = arcade.Text(f"Выход из астральной формы через: {int(6 - self.player.astral_timer)}",
+                                     0, 740,
+                                     arcade.color.WHITE, 25,
+                                     batch=self.batch1)
             self.astral_list.draw()
         self.door1_list.draw()
         self.devices.draw()
@@ -311,9 +326,20 @@ class Astral_Escape_1(arcade.View):
                 for emitter in device.emitters:
                     emitter.draw()
         self.gui_camera.use()
+        if self.player.astral_form:
+            self.batch1.draw()
         self.batch.draw()
 
     def on_update(self, delta_time):
+        if self.player.astral_form:
+            if self.player.astral_timer > 5:
+                self.player.astral_form = False
+                self.player.center_x = self.player.astral_form_x
+                self.player.center_y = self.player.astral_form_y
+                self.player.texture = self.player.texture_forward
+                self.player.astral_timer = 0
+            else:
+                self.player.astral_timer += delta_time
         self.cam_alert.center_y = self.player.center_y - 45
         self.cam_alert.center_x = self.player.center_x
         if not self.player.astral_form:  # только в физической форме
@@ -398,6 +424,7 @@ class Astral_Escape_1(arcade.View):
                 self.player.center_x = self.player.astral_form_x
                 self.player.center_y = self.player.astral_form_y
                 self.player.texture = self.player.texture_forward
+                self.player.astral_timer = 0
             else:
                 self.player.astral_form = True
                 self.player.astral_form_x = self.player.center_x
@@ -491,6 +518,7 @@ class Astral_Escape_2(arcade.View):
         self.devices = None
         self.current_device = None
         self.batch = Batch()
+        self.batch1 = Batch()
         self.text_info = arcade.Text("WASD — ходьба • E — взаимодействие • Q — астральная форма",
                                      16, 16, arcade.color.WHITE, 14, batch=self.batch)
         self.world_camera = arcade.camera.Camera2D()
@@ -624,6 +652,8 @@ class Astral_Escape_2(arcade.View):
                 for emitter in device.emitters:
                     emitter.draw()
         self.gui_camera.use()
+        if self.player.astral_form:
+            self.batch1.draw()
         self.batch.draw()
 
     def on_show_view(self):
@@ -633,6 +663,15 @@ class Astral_Escape_2(arcade.View):
         arcade.stop_sound(self.explosion_player)
 
     def on_update(self, delta_time):
+        if self.player.astral_form:
+            if self.player.astral_timer > 5:
+                self.player.astral_form = False
+                self.player.center_x = self.player.astral_form_x
+                self.player.center_y = self.player.astral_form_y
+                self.player.texture = self.player.texture_forward
+                self.player.astral_timer = 0
+            else:
+                self.player.astral_timer += delta_time
         self.cam_alert.center_y = self.player.center_y - 45
         self.cam_alert.center_x = self.player.center_x
         if not self.player.astral_form:  # только в физической форме
@@ -712,6 +751,7 @@ class Astral_Escape_2(arcade.View):
                 self.player.center_x = self.player.astral_form_x
                 self.player.center_y = self.player.astral_form_y
                 self.player.texture = self.player.texture_forward
+                self.player.astral_timer = 0
             else:
                 self.player.astral_form = True
                 self.player.astral_form_x = self.player.center_x
