@@ -87,23 +87,24 @@ class Device(arcade.Sprite):
         pass
 
 
+# класс для камеры безопасности
 class Camera(Device):
-    def __init__(self, x, y, max_degrees):
+    def __init__(self, x, y, max_degrees, min_angle):
         super().__init__(x, y)
         self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
         self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
-        self.texture = self.unhacked_texture
+        self.texture = self.unhacked_texture  # устанавливаем не взломанную структуру изначально
 
-        self.radius_sprite = arcade.Sprite("images/devices/radius.png")
+        self.radius_sprite = arcade.Sprite("images/devices/radius.png")  # делаем спрайт для сектора
         self.radius_sprite.scale = 0.1
         self.radius_sprite.center_x = x
         self.radius_sprite.center_y = y
 
-        self.rotation_speed = 20
+        self.rotation_speed = 20  # скорость поворота камеру
         self.rotation_direction = 1
         self.max_angle = max_degrees
-        self.angle = 0
-        self.radius_angle = 0
+        self.angle = min_angle
+        self.radius_angle = min_angle
         self.radius_rotation_speed = 20
         self.radius_direction = 1
         self.is_hacked = False
@@ -111,9 +112,9 @@ class Camera(Device):
 
     def on_hack(self):
         if self.hacked_texture:
-            self.texture = self.hacked_texture
+            self.texture = self.hacked_texture  # меняем текстуру при взломе
             self.is_hacked = True
-            if self.radius_sprite in self.radius_sprite_list:
+            if self.radius_sprite in self.radius_sprite_list:  # убираем сектор при взломе
                 self.radius_sprite_list.remove(self.radius_sprite)
             self.emitters.append(make_explosion(self.center_x, self.center_y))
             self.emitters.append(make_smoke_puff(self.center_x, self.center_y))
