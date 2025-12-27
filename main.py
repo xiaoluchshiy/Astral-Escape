@@ -414,14 +414,14 @@ class FinalView_1(arcade.View):
                                   600,
                                   300,
                                   arcade.color.WHITE,
-                                  font_size=48,
+                                  font_size=30,
                                   anchor_x="center",
                                   anchor_y="center", batch=self.batch)
         self.title3 = arcade.Text("Нажми Esc, чтобы выйти из игры!",
                                   600,
                                   200,
                                   arcade.color.WHITE,
-                                  font_size=48,
+                                  font_size=30,
                                   anchor_x="center",
                                   anchor_y="center", batch=self.batch)
         self.batch.draw()
