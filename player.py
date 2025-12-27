@@ -1,6 +1,7 @@
 from main import *
 import arcade
 
+
 class Player(arcade.Sprite):
     # создаем игрока
     def __init__(self):

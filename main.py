@@ -12,6 +12,7 @@ SCREEN_TITLE = "Astral Escape"
 PLAYER_SPEED = 300
 ANIMATION_SPEED = 0.085
 
+
 class Minigame(arcade.View):
     def __init__(self, game_view):
         super().__init__()
@@ -31,7 +32,6 @@ class Minigame(arcade.View):
 
     def on_update(self, delta_time):
         self.current_time += delta_time
-
 
     def on_draw(self):
         self.clear()
@@ -69,77 +69,6 @@ class Minigame(arcade.View):
                 batch=self.batch1
             )
             self.batch1.draw()
-            if self.message:
-                color = arcade.color.GREEN if self.message == "Верно!" else arcade.color.RED
-                arcade.draw_text(
-                    self.message,
-                    self.window.width // 2,
-                    self.window.height // 2 + 100,
-                    color,
-                    50,
-                    anchor_x="center"
-                )
-
-    def on_key_press(self, key, modifiers):
-        if arcade.key.KEY_0 <= key <= arcade.key.KEY_9:
-            if len(self.user_input) < 3:
-                self.user_input += str(key - arcade.key.KEY_0)
-        elif key == arcade.key.ENTER:
-            if self.user_input == self.code:
-                self.message = "Верно!"
-                self.window.show_view(self.game_view)
-            else:
-                self.message = "Неверно!"
-                self.user_input = ""
-
-
-class Minigame(arcade.View):
-    def __init__(self, game_view):
-        super().__init__()
-        # устанавливаем фон
-        self.game_view = game_view
-        self.background = arcade.load_texture("images/space.png")
-        self.code = str(random.randint(100, 999))
-        self.show_time = 3
-        self.current_time = 0
-        self.user_input = ""
-        self.message = ''
-
-    def setup(self):
-        pass
-
-    def on_update(self, delta_time):
-        self.current_time += delta_time
-
-
-    def on_draw(self):
-        self.clear()
-        if self.current_time < self.show_time:
-            arcade.draw_text(
-                self.code,
-                self.window.width // 2,
-                self.window.height // 2,
-                arcade.color.WHITE,
-                80,
-                anchor_x="center"
-            )
-        else:
-            arcade.draw_text(
-                f"Ввод: {self.user_input}",
-                self.window.width // 2,
-                self.window.height // 2,
-                arcade.color.YELLOW,
-                40,
-                anchor_x="center"
-            )
-            arcade.draw_text(
-                "Введи цифры (1-9), ENTER — проверить",
-                self.window.width // 2,
-                self.window.height // 2 - 50,
-                arcade.color.GRAY,
-                16,
-                anchor_x="center"
-            )
             if self.message:
                 color = arcade.color.GREEN if self.message == "Верно!" else arcade.color.RED
                 arcade.draw_text(
@@ -312,9 +241,9 @@ class Astral_Escape_1(arcade.View):
                                      arcade.rect.XYWH(self.player.astral_form_x, self.player.astral_form_y, 80,
                                                       80))
             self.title1 = arcade.Text(f"Выход из астральной формы через: {int(6 - self.player.astral_timer)}",
-                                     0, 740,
-                                     arcade.color.WHITE, 25,
-                                     batch=self.batch1)
+                                      0, 740,
+                                      arcade.color.WHITE, 25,
+                                      batch=self.batch1)
             self.astral_list.draw()
         self.door1_list.draw()
         self.devices.draw()
@@ -355,9 +284,9 @@ class Astral_Escape_1(arcade.View):
         if 1 <= seconds <= 9:
             seconds = "0" + str(seconds)
         self.title = arcade.Text(f"Время: {minutes}:{seconds}",
-                            0, 770,
-                            arcade.color.WHITE, 25,
-                            batch=self.batch)
+                                 0, 770,
+                                 arcade.color.WHITE, 25,
+                                 batch=self.batch)
         self.total_time += delta_time
 
         self.physics_engine.update()
@@ -473,21 +402,21 @@ class FinalView_1(arcade.View):
         # Батч для текста.
         self.batch = Batch()
         self.title = arcade.Text("Поздравляем с прохождением первого уровня!",
-                            600, 700,
-                            arcade.color.WHITE, 30,
-                            anchor_x="center", batch=self.batch)
-        self.title1 = arcade.Text(f"Ваше время: {self.minutes}:{self.seconds} "
-                                  f"Лучшее время: {self.min_minutes}:{self.min_seconds}",
-                                 600, 600,
+                                 600, 700,
                                  arcade.color.WHITE, 30,
                                  anchor_x="center", batch=self.batch)
+        self.title1 = arcade.Text(f"Ваше время: {self.minutes}:{self.seconds} "
+                                  f"Лучшее время: {self.min_minutes}:{self.min_seconds}",
+                                  600, 600,
+                                  arcade.color.WHITE, 30,
+                                  anchor_x="center", batch=self.batch)
         self.title2 = arcade.Text("Нажми SPACE, чтобы перейти на следующий уровень!",
-                             600,
-                             300,
-                             arcade.color.WHITE,
-                             font_size=48,
-                             anchor_x="center",
-                             anchor_y="center", batch=self.batch)
+                                  600,
+                                  300,
+                                  arcade.color.WHITE,
+                                  font_size=48,
+                                  anchor_x="center",
+                                  anchor_y="center", batch=self.batch)
         self.title3 = arcade.Text("Нажми Esc, чтобы выйти из игры!",
                                   600,
                                   200,
@@ -687,9 +616,9 @@ class Astral_Escape_2(arcade.View):
         if 1 <= seconds <= 9:
             seconds = "0" + str(seconds)
         self.title = arcade.Text(f"Время: {minutes}:{seconds}",
-                            0, 770,
-                            arcade.color.WHITE, 25,
-                            batch=self.batch)
+                                 0, 770,
+                                 arcade.color.WHITE, 25,
+                                 batch=self.batch)
         self.total_time += delta_time
 
         self.physics_engine.update()
@@ -800,21 +729,21 @@ class FinalView_2(arcade.View):
         # Батч для текста.
         self.batch = Batch()
         self.title = arcade.Text("Поздравляем с прохождением игры!",
-                            600, 700,
-                            arcade.color.WHITE, 30,
-                            anchor_x="center", batch=self.batch)
-        self.title1 = arcade.Text(f"Ваше время: {self.minutes}:{self.seconds} "
-                                  f"Лучшее время: {self.min_minutes}:{self.min_seconds}",
-                                 600, 600,
+                                 600, 700,
                                  arcade.color.WHITE, 30,
                                  anchor_x="center", batch=self.batch)
+        self.title1 = arcade.Text(f"Ваше время: {self.minutes}:{self.seconds} "
+                                  f"Лучшее время: {self.min_minutes}:{self.min_seconds}",
+                                  600, 600,
+                                  arcade.color.WHITE, 30,
+                                  anchor_x="center", batch=self.batch)
         self.title2 = arcade.Text("Нажми SPACE, чтобы начать игру заново!",
-                             600,
-                             300,
-                             arcade.color.WHITE,
-                             font_size=48,
-                             anchor_x="center",
-                             anchor_y="center", batch=self.batch)
+                                  600,
+                                  300,
+                                  arcade.color.WHITE,
+                                  font_size=48,
+                                  anchor_x="center",
+                                  anchor_y="center", batch=self.batch)
         self.title3 = arcade.Text("Нажми Esc, чтобы выйти из игры!",
                                   600,
                                   200,
@@ -832,6 +761,7 @@ class FinalView_2(arcade.View):
             self.window.show_view(game_view)
         if key == arcade.key.ESCAPE:
             self.window.close()
+
 
 def main():
     window = arcade.Window(1200, 800, SCREEN_TITLE)
