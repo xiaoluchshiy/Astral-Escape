@@ -92,8 +92,8 @@ class StartView(arcade.View):
         self.clear()
         self.batch = Batch()
         title = arcade.Text("Нажми SPACE, чтобы начать!",
-                            SCREEN_WIDTH - 2400,
-                            SCREEN_HEIGHT - 1400,
+                            600,
+                            400,
                             arcade.color.WHITE,
                             font_size=48,
                             anchor_x="center",
@@ -120,7 +120,11 @@ class Astral_Escape(arcade.View):
         # устройства
         self.devices = None
         self.current_device = None
+        self.batch = Batch()
+        self.text_info = arcade.Text("WASD — ходьба • E — взаимодействие • Q — астральная форма",
+                                     16, 16, arcade.color.WHITE, 14, batch=self.batch)
         self.world_camera = arcade.camera.Camera2D()
+        self.gui_camera = arcade.camera.Camera2D()
 
     def setup(self):
         # Создание объектов
@@ -157,6 +161,8 @@ class Astral_Escape(arcade.View):
         # звук
         self.sound_timer = 0
         self.explosion_sound = arcade.load_sound("music.wav")
+
+        self.total_time = 0
 
         self.current_texture = 0
         self.texture_change_time = 0
@@ -213,6 +219,7 @@ class Astral_Escape(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.world_camera.use()
         # Отрисовка фона
         arcade.draw_texture_rect(self.background,
                                  arcade.rect.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH,
@@ -233,11 +240,12 @@ class Astral_Escape(arcade.View):
         self.player_list.draw()
         if self.current_device:
             self.alerts.draw()
-        self.world_camera.use()
         for device in self.devices:
             if hasattr(device, 'emitters'):
                 for emitter in device.emitters:
                     emitter.draw()
+        self.gui_camera.use()
+        self.batch.draw()
 
     def on_update(self, delta_time):
         self.cam_alert.center_y = self.player.center_y - 45
@@ -254,8 +262,16 @@ class Astral_Escape(arcade.View):
             self.explosion_sound.play()
         if self.sound_timer >= 120:
             self.sound_timer = 0
-
         self.sound_timer += delta_time
+
+        minutes = int(self.total_time) // 60
+        seconds = int(self.total_time) % 60
+        self.title = arcade.Text(f"Время: {minutes}:{seconds}",
+                            0, 770,
+                            arcade.color.WHITE, 25,
+                            batch=self.batch)
+        self.total_time += delta_time
+
         self.physics_engine.update()
         self.update_animation()
 
@@ -276,10 +292,13 @@ class Astral_Escape(arcade.View):
                 self.player.texture = self.player.astral_texture_forward
 
         if arcade.check_for_collision_with_list(self.player, self.door1_collision_list):
+            with open("time.txt", "a", encoding="utf-8") as f:
+                f.write(f'{str(self.total_time)}\n')
             game_view = FinalView()
             self.window.show_view(game_view)
 
         self.player.update(delta_time)
+
         for device in self.devices:
             device.update(delta_time)
         self.current_device = None
@@ -287,8 +306,10 @@ class Astral_Escape(arcade.View):
             if device.can_interact(self.player.center_x, self.player.center_y):
                 self.current_device = device
                 break
+
         position = (self.player.center_x, self.player.center_y)
         self.world_camera.position = arcade.math.lerp_2d(self.world_camera.position, position, 0.12)
+        self.gui_camera.position = (600, 400)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
@@ -332,16 +353,55 @@ class Astral_Escape(arcade.View):
 class FinalView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.background_color = arcade.color.BLUE_GRAY
-        self.batch = Batch()
-        self.main_text = arcade.Text("Главное Меню", 20, 20,
-                                     arcade.color.RED, font_size=40, anchor_x="center", batch=self.batch)
+        self.time_list = []
+        with open("time.txt", "r", encoding="utf-8") as f:
+            for i in f:
+                self.time_list.append(float(i))
+        self.total_time = self.time_list[-1]
+        self.min_time = min(self.time_list)
+        self.min_minutes = int(self.min_time) // 60
+        self.min_seconds = int(self.min_time) % 60
+        self.minutes = int(self.total_time) // 60
+        self.seconds = int(self.total_time) % 60
 
     def on_draw(self):
         """Отрисовка начального экрана"""
-        arcade.get_window().use()
         self.clear()
+        # Батч для текста.
+        self.batch = Batch()
+        self.title = arcade.Text("Поздравляем с прохождением игры!",
+                            600, 700,
+                            arcade.color.WHITE, 30,
+                            anchor_x="center", batch=self.batch)
+        self.title1 = arcade.Text(f"Ваше время: {self.minutes}:{self.seconds} "
+                                  f"Лучшее время: {self.min_minutes}:{self.min_seconds}",
+                                 600, 600,
+                                 arcade.color.WHITE, 30,
+                                 anchor_x="center", batch=self.batch)
+        self.title2 = arcade.Text("Нажми SPACE, чтобы начать еще раз!",
+                             600,
+                             300,
+                             arcade.color.WHITE,
+                             font_size=48,
+                             anchor_x="center",
+                             anchor_y="center", batch=self.batch)
+        self.title3 = arcade.Text("Нажми Esc, чтобы выйти из игры",
+                                  600,
+                                  200,
+                                  arcade.color.WHITE,
+                                  font_size=48,
+                                  anchor_x="center",
+                                  anchor_y="center", batch=self.batch)
         self.batch.draw()
+
+    def on_key_press(self, key, modifiers):
+        # при нажатии запускается основная игра
+        if key == arcade.key.SPACE:
+            game_view = Astral_Escape()
+            game_view.setup()
+            self.window.show_view(game_view)
+        if key == arcade.key.ESCAPE:
+            self.window.close()
 
 
 def main():
