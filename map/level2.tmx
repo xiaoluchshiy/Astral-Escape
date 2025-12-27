@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="20" tileheight="20" infinite="0" nextlayerid="11" nextobjectid="1">
+ <tileset firstgid="1" source="map.tsx"/>
+ <layer id="1" name="walls" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt1EEKwzAMRFGvs0tCe54eLUfr0aJNiyKMkRwjTPsfDAQKjsZ2UwoAAAAAAAAAAHm2Ul6ryi6ZYY5aRrznKVlUHp2zeLJdn9+tOWrJ6uuZxRO9jn3PzH1XZ36hb+1379rRvnb/Rujpq/+Hre/bnb6RfY3o6es9b7u27NP3rOT5iM4xQmbf1rfb3uWsvrW57Bz6nPbg2t5k9h01x7/11fcgmta9uUPWPWaYAwA+TpOLIM4=
+  </data>
+ </layer>
+ <layer id="6" name="astral" width="60" height="40" opacity="0.48">
+  <data encoding="base64" compression="zlib">
+   eJzt0sEJwDAMA0BPUkIm6egZLXlkhdYY34HATwkcAQAAAAAAUM/MLvCzbnurGhHvc3PulVznc93+stvekV0AAIrYXQ4CpQ==
+  </data>
+ </layer>
+ <layer id="2" name="collision" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt1NEJwCAMBcBu0f037QK2aDTEyh34J0meqNcFAAAAALCH+6dL3rG8u5xFtpG8K3u+9clWkferTzZ523O09kTf5Cn3OStv1f/cW2vmXvTWjarIG50xO2+01ql5o//Vij6ztVbNIW/OiqqcWd78vJzlAcVkJGQ=
+  </data>
+ </layer>
+ <layer id="3" name="door" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6DlsH9QM+zSAxKQAAAAAAAA/DDXAQAAgNICcd8AGw==
+  </data>
+ </layer>
+ <layer id="4" name="door_collision" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzwkNAAAIxLBTgX+puOBJWgVbAgAAAAAAXFbbAcP8AgAAnzRwNQBD
+  </data>
+ </layer>
+ <layer id="8" name="door1_collision" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6BamH+zM1ABPSAhAQAAAAAAANhwJQDAsgcKxQBW
+  </data>
+ </layer>
+ <layer id="9" name="door1" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAMAiBzrH/QdfDxgQQkAAAAAAAAACzdOgAA1B7v0AAb
+  </data>
+ </layer>
+ <layer id="7" name="door2" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6DnsH9QY3xTSEACAAAAAADwy7QDAADAGQtnTwAb
+  </data>
+ </layer>
+ <layer id="10" name="door2_collision" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzzENAAAIwDBc4N8pBniBhLQKtggAAAAAAKCT1wHL/P7mFwAAZhSzHwB0
+  </data>
+ </layer>
+ <layer id="5" name="astral_collision" width="60" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztz7ENACAMA8Fskf03pUWImijkTnLvjwAAAAAAAOgnqw88Nq23qzz2uwmNO70AwM0CHWwA0A==
+  </data>
+ </layer>
+</map>
