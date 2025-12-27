@@ -1,6 +1,7 @@
 from devices import *
 from player import *
 import arcade
+import random
 from alert import PressE
 from pyglet.graphics import Batch
 
@@ -10,6 +11,77 @@ SCREEN_HEIGHT = 2000
 SCREEN_TITLE = "Astral Escape"
 PLAYER_SPEED = 300
 ANIMATION_SPEED = 0.085
+
+
+class Minigame(arcade.View):
+    def __init__(self, game_view):
+        super().__init__()
+        # устанавливаем фон
+        self.game_view = game_view
+        self.background = arcade.load_texture("images/space.png")
+        self.code = str(random.randint(100, 999))
+        self.show_time = 3
+        self.current_time = 0
+        self.user_input = ""
+        self.message = ''
+
+    def setup(self):
+        pass
+
+    def on_update(self, delta_time):
+        self.current_time += delta_time
+
+
+    def on_draw(self):
+        self.clear()
+        if self.current_time < self.show_time:
+            arcade.draw_text(
+                self.code,
+                self.window.width // 2,
+                self.window.height // 2,
+                arcade.color.WHITE,
+                80,
+                anchor_x="center"
+            )
+        else:
+            arcade.draw_text(
+                f"Ввод: {self.user_input}",
+                self.window.width // 2,
+                self.window.height // 2,
+                arcade.color.YELLOW,
+                40,
+                anchor_x="center"
+            )
+            arcade.draw_text(
+                "Введи цифры (1-9), ENTER — проверить",
+                self.window.width // 2,
+                self.window.height // 2 - 50,
+                arcade.color.GRAY,
+                16,
+                anchor_x="center"
+            )
+            if self.message:
+                color = arcade.color.GREEN if self.message == "Верно!" else arcade.color.RED
+                arcade.draw_text(
+                    self.message,
+                    self.window.width // 2,
+                    self.window.height // 2 + 100,
+                    color,
+                    50,
+                    anchor_x="center"
+                )
+
+    def on_key_press(self, key, modifiers):
+        if arcade.key.KEY_0 <= key <= arcade.key.KEY_9:
+            if len(self.user_input) < 3:
+                self.user_input += str(key - arcade.key.KEY_0)
+        elif key == arcade.key.ENTER:
+            if self.user_input == self.code:
+                self.message = "Верно!"
+                self.window.show_view(self.game_view)
+            else:
+                self.message = "Неверно!"
+                self.user_input = ""
 
 
 class StartView(arcade.View):
@@ -266,6 +338,11 @@ class Astral_Escape(arcade.View):
         elif key == arcade.key.E:
             if self.current_device and not self.current_device.is_hacked:
                 self.current_device.hack()
+                if hasattr(self.current_device, 'emitters'):
+                    game_view = Minigame(self)
+                    game_view.setup()
+                    self.window.show_view(game_view)
+
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:
