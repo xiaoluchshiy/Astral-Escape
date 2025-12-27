@@ -89,7 +89,7 @@ class Device(arcade.Sprite):
 
 # класс для камеры безопасности
 class Camera(Device):
-    def __init__(self, x, y, max_degrees):
+    def __init__(self, x, y, max_degrees, min_angle):
         super().__init__(x, y)
         self.unhacked_texture = arcade.load_texture("images/devices/camera_unhacked.png")
         self.hacked_texture = arcade.load_texture("images/devices/camera_hacked.png")
@@ -103,8 +103,8 @@ class Camera(Device):
         self.rotation_speed = 20  # скорость поворота камеру
         self.rotation_direction = 1
         self.max_angle = max_degrees
-        self.angle = 0
-        self.radius_angle = 0
+        self.angle = min_angle
+        self.radius_angle = min_angle
         self.radius_rotation_speed = 20
         self.radius_direction = 1
         self.is_hacked = False

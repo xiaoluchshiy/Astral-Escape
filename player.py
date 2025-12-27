@@ -1,6 +1,7 @@
 from main import *
 import arcade
 
+
 class Player(arcade.Sprite):
     # создаем игрока
     def __init__(self):
@@ -49,6 +50,7 @@ class Player(arcade.Sprite):
         self.astral_form = False
         self.astral_form_x = 0
         self.astral_form_y = 0
+        self.astral_timer = 0
 
         self.is_walking = False
 
