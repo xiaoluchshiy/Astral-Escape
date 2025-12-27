@@ -332,20 +332,16 @@ class Astral_Escape(arcade.View):
 class FinalView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.background = arcade.load_texture("images/space.png")
-
-    def on_show_view(self):
-        pass
+        self.background_color = arcade.color.BLUE_GRAY
+        self.batch = Batch()
+        self.main_text = arcade.Text("Главное Меню", 20, 20,
+                                     arcade.color.RED, font_size=40, anchor_x="center", batch=self.batch)
 
     def on_draw(self):
-        pass
-
-    def on_key_press(self, key, modifiers):
-            # при нажатии запускается основная игра
-            if key == arcade.key.SPACE:
-                game_view = Astral_Escape()
-                game_view.setup()
-                self.window.show_view(game_view)
+        """Отрисовка начального экрана"""
+        arcade.get_window().use()
+        self.clear()
+        self.batch.draw()
 
 
 def main():
