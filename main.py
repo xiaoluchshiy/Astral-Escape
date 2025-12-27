@@ -144,7 +144,7 @@ class Astral_Escape_1(arcade.View):
         self.devices = arcade.SpriteList()
         self.robots = arcade.SpriteList()
         self.radius_sprites = arcade.SpriteList()
-        camera = Camera(570, 1220, 25)
+        camera = Camera(570, 1220, 25, 0)
         camera.radius_sprite_list = self.radius_sprites
         button = Button(1110, 809)
         self.buttons = arcade.SpriteList()
@@ -466,7 +466,7 @@ class Astral_Escape_2(arcade.View):
         self.devices = arcade.SpriteList()
         self.robots = arcade.SpriteList()
         self.radius_sprites = arcade.SpriteList()
-        camera = Camera(570, 1220, 25)
+        camera = Camera(570, 1220, 25, 0)
         camera.radius_sprite_list = self.radius_sprites
         self.button = Button(1260, 540)
         self.button1 = Button(2100, 660)
