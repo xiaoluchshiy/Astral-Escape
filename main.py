@@ -146,10 +146,16 @@ class Astral_Escape_1(arcade.View):
         self.radius_sprites = arcade.SpriteList()
         camera = Camera(570, 1220, 25, 0)
         camera.radius_sprite_list = self.radius_sprites
+        camera1 = Camera(1450, 820, 25, 0)
+        camera1.radius_sprite_list = self.radius_sprites
+        camera2 = Camera(1050, 1535, 25, 0)
+        camera2.radius_sprite_list = self.radius_sprites
         button = Button(1110, 809)
         self.buttons = arcade.SpriteList()
         self.buttons.append(button)
         self.devices.append(camera)
+        self.devices.append(camera1)
+        self.devices.append(camera2)
         self.devices.append(button)
         self.wall_list = arcade.SpriteList()
         map_name = "map/level1.tmx"
@@ -179,7 +185,16 @@ class Astral_Escape_1(arcade.View):
         )
         self.robots.append(robot)
         self.devices.append(robot)
+        robot1 = Robot(
+            x=1650, y=820,
+            point_a=(1650, 820),
+            point_b=(1650, 1300),
+        )
+        self.robots.append(robot1)
+        self.devices.append(robot1)
         self.radius_sprites.append(camera.radius_sprite)
+        self.radius_sprites.append(camera1.radius_sprite)
+        self.radius_sprites.append(camera2.radius_sprite)
 
     def update_animation(self, delta_time: float = 1 / 60):
         """ Обновление анимации """
@@ -466,7 +481,7 @@ class Astral_Escape_2(arcade.View):
         self.devices = arcade.SpriteList()
         self.robots = arcade.SpriteList()
         self.radius_sprites = arcade.SpriteList()
-        camera = Camera(570, 1220, 25, 0)
+        camera = Camera(744, 460, 25, 0)
         camera.radius_sprite_list = self.radius_sprites
         self.button = Button(1260, 540)
         self.button1 = Button(2100, 660)
@@ -501,12 +516,19 @@ class Astral_Escape_2(arcade.View):
         self.current_texture = 0
         self.texture_change_time = 0
         robot = Robot(
-            x=800, y=1100,
-            point_a=(800, 1100),
-            point_b=(1000, 1100),
+            x=935, y=830,
+            point_a=(935, 830),
+            point_b=(1350, 830),
         )
         self.robots.append(robot)
         self.devices.append(robot)
+        robot1 = Robot(
+            x=1790, y=450,
+            point_a=(1790, 450),
+            point_b=(2600, 450),
+        )
+        self.robots.append(robot1)
+        self.devices.append(robot1)
         self.radius_sprites.append(camera.radius_sprite)
 
     def update_animation(self, delta_time: float = 1 / 60):
