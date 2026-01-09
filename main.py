@@ -20,7 +20,7 @@ class Minigame(arcade.View):
         self.game_view = game_view
         self.background = arcade.load_texture("images/space.png")
         self.code = str(random.randint(100, 999))
-        self.show_time = 3
+        self.show_time = 2
         self.current_time = 0
         self.user_input = ""
         self.message = ''
